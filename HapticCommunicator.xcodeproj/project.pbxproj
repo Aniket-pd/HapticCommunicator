@@ -54,11 +54,6 @@
 			path = HapticCommunicatorUITests;
 			sourceTree = "<group>";
 		};
-		E21786B22E2129A8005DBB8B /* New Folder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "New Folder";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +84,6 @@
 		E217867B2E212795005DBB8B = {
 			isa = PBXGroup;
 			children = (
-				E21786B22E2129A8005DBB8B /* New Folder */,
 				E21786B12E21298C005DBB8B /* Utilities */,
 				E21786B02E212983005DBB8B /* Models */,
 				E21786AF2E212977005DBB8B /* ViewModels */,
@@ -165,7 +159,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				E21786862E212795005DBB8B /* HapticCommunicator */,
-				E21786B22E2129A8005DBB8B /* New Folder */,
 			);
 			name = HapticCommunicator;
 			packageProductDependencies = (
