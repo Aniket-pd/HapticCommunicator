@@ -10,6 +10,7 @@ import SwiftUI
 
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
+    @State private var isPressing = false
 
     var body: some View {
         NavigationStack {
@@ -35,20 +36,24 @@ struct UserView: View {
                     .padding(.horizontal, 30)
                     .foregroundColor(.gray)
             }
-            .contentShape(Rectangle()) // Make entire area tappable
-            .simultaneousGesture(
-                LongPressGesture(minimumDuration: 0.3)
-                    .onEnded { _ in
-                        viewModel.handleTapStart()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            viewModel.handleTapEnd()
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        if !isPressing {
+                            isPressing = true
+                            viewModel.handleTapStart()
                         }
                     }
-            )
-            .simultaneousGesture(
-                TapGesture(count: 2)
-                    .onEnded {
-                        viewModel.handleDoubleTap()
+                    .onEnded { value in
+                        isPressing = false
+                        viewModel.handleTapEnd()
+
+                        // Check if swipe up
+                        if value.translation.height < -30 {
+                            // Negative height means upward swipe
+                            viewModel.handleDoubleTap()
+                        }
                     }
             )
             .padding()
