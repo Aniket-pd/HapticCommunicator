@@ -35,6 +35,7 @@
 		E21786B82E212AD6005DBB8B /* CaregiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaregiverView.swift; sourceTree = "<group>"; };
 		E21786B92E212AF5005DBB8B /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		E21786BA2E212B26005DBB8B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeConverter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -142,6 +143,7 @@
 		E21786B12E21298C005DBB8B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
