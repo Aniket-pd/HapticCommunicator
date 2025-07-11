@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct HomeView: View {
@@ -7,9 +6,7 @@ struct HomeView: View {
             VStack(spacing: 24) {
                 Spacer()
                 
-                Button(action: {
-                    // Navigate to Caregiver Mode
-                }) {
+                NavigationLink(destination: CaregiverView()) {
                     Text("Caregiver Mode")
                         .font(.title2)
                         .fontWeight(.semibold)
@@ -19,9 +16,7 @@ struct HomeView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 
-                Button(action: {
-                    // Navigate to User Mode
-                }) {
+                NavigationLink(destination: UserView()) {
                     Text("User Mode")
                         .font(.title2)
                         .fontWeight(.semibold)
@@ -60,4 +55,3 @@ struct HomeView_Previews: PreviewProvider {
 #Preview {
     HomeView()
 }
-

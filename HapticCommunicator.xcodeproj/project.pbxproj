@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786872E212795005DBB8B /* HapticCommunicatorApp.swift */; };
 		E21786BC2E2141FA005DBB8B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B72E212AC3005DBB8B /* HomeView.swift */; };
+		E21786D82E216FA4005DBB8B /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B92E212AF5005DBB8B /* UserView.swift */; };
+		E21786D92E216FBC005DBB8B /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B62E212A93005DBB8B /* UserViewModel.swift */; };
+		E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */; };
+		E21786DB2E216FDC005DBB8B /* CaregiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B82E212AD6005DBB8B /* CaregiverView.swift */; };
+		E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +300,11 @@
 			files = (
 				E21786BC2E2141FA005DBB8B /* HomeView.swift in Sources */,
 				E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */,
+				E21786DB2E216FDC005DBB8B /* CaregiverView.swift in Sources */,
+				E21786D92E216FBC005DBB8B /* UserViewModel.swift in Sources */,
+				E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */,
+				E21786D82E216FA4005DBB8B /* UserView.swift in Sources */,
+				E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +474,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -496,6 +507,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

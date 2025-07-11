@@ -9,6 +9,7 @@ import Foundation
 import AVFoundation
 import CoreHaptics
 import Combine
+import UIKit
 
 class UserViewModel: ObservableObject {
     @Published var morseInput: String = ""
@@ -83,3 +84,4 @@ class UserViewModel: ObservableObject {
         audioFeedbackEnabled.toggle()
     }
 }
+
