@@ -27,6 +27,14 @@
 		E21786842E212795005DBB8B /* HapticCommunicator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticCommunicator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21786912E212796005DBB8B /* HapticCommunicatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HapticCommunicatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E217869B2E212796005DBB8B /* HapticCommunicatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HapticCommunicatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E21786B32E212A13005DBB8B /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
+		E21786B42E212A54005DBB8B /* MorseCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeConverter.swift; sourceTree = "<group>"; };
+		E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaregiverViewModel.swift; sourceTree = "<group>"; };
+		E21786B62E212A93005DBB8B /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		E21786B72E212AC3005DBB8B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		E21786B82E212AD6005DBB8B /* CaregiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaregiverView.swift; sourceTree = "<group>"; };
+		E21786B92E212AF5005DBB8B /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		E21786BA2E212B26005DBB8B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -43,6 +51,11 @@
 		E217869E2E212796005DBB8B /* HapticCommunicatorUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = HapticCommunicatorUITests;
+			sourceTree = "<group>";
+		};
+		E21786B22E2129A8005DBB8B /* New Folder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "New Folder";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +88,11 @@
 		E217867B2E212795005DBB8B = {
 			isa = PBXGroup;
 			children = (
+				E21786B22E2129A8005DBB8B /* New Folder */,
+				E21786B12E21298C005DBB8B /* Utilities */,
+				E21786B02E212983005DBB8B /* Models */,
+				E21786AF2E212977005DBB8B /* ViewModels */,
+				E21786AE2E21296D005DBB8B /* Views */,
 				E21786862E212795005DBB8B /* HapticCommunicator */,
 				E21786942E212796005DBB8B /* HapticCommunicatorTests */,
 				E217869E2E212796005DBB8B /* HapticCommunicatorUITests */,
@@ -90,6 +108,42 @@
 				E217869B2E212796005DBB8B /* HapticCommunicatorUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E21786AE2E21296D005DBB8B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E21786BA2E212B26005DBB8B /* SettingsView.swift */,
+				E21786B92E212AF5005DBB8B /* UserView.swift */,
+				E21786B82E212AD6005DBB8B /* CaregiverView.swift */,
+				E21786B72E212AC3005DBB8B /* HomeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E21786AF2E212977005DBB8B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E21786B62E212A93005DBB8B /* UserViewModel.swift */,
+				E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		E21786B02E212983005DBB8B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E21786B42E212A54005DBB8B /* MorseCodeConverter.swift */,
+				E21786B32E212A13005DBB8B /* MessageModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E21786B12E21298C005DBB8B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -109,6 +163,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				E21786862E212795005DBB8B /* HapticCommunicator */,
+				E21786B22E2129A8005DBB8B /* New Folder */,
 			);
 			name = HapticCommunicator;
 			packageProductDependencies = (
