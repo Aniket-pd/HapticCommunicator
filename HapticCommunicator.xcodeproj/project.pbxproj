@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786872E212795005DBB8B /* HapticCommunicatorApp.swift */; };
+		E21786BC2E2141FA005DBB8B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B72E212AC3005DBB8B /* HomeView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		E21786922E212796005DBB8B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -25,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		E21786842E212795005DBB8B /* HapticCommunicator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticCommunicator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E21786872E212795005DBB8B /* HapticCommunicatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticCommunicatorApp.swift; sourceTree = "<group>"; };
 		E21786912E212796005DBB8B /* HapticCommunicatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HapticCommunicatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E217869B2E212796005DBB8B /* HapticCommunicatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HapticCommunicatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21786B32E212A13005DBB8B /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 		E217867B2E212795005DBB8B = {
 			isa = PBXGroup;
 			children = (
+				E21786872E212795005DBB8B /* HapticCommunicatorApp.swift */,
 				E21786B12E21298C005DBB8B /* Utilities */,
 				E21786B02E212983005DBB8B /* Models */,
 				E21786AF2E212977005DBB8B /* ViewModels */,
@@ -286,6 +293,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E21786BC2E2141FA005DBB8B /* HomeView.swift in Sources */,
+				E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
