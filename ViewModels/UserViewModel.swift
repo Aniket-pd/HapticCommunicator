@@ -19,7 +19,6 @@ class UserViewModel: ObservableObject {
     private var speechSynthesizer = AVSpeechSynthesizer()
     private var hapticEngine: CHHapticEngine?
     private var tapStartTime: Date?
-    private var recentDurations: [TimeInterval] = []
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
     private var lastTapEndTime: Date?
 
@@ -28,17 +27,7 @@ class UserViewModel: ObservableObject {
     }
 
     func handleTapStart() {
-        let now = Date()
-        if let lastEnd = lastTapEndTime {
-            let gap = now.timeIntervalSince(lastEnd)
-            if gap >= 1.0 {
-                morseInput.append(" ")   // space between words
-                playAudioFeedback("space")
-            } else if gap >= 0.5 {
-                morseInput.append("|")   // separator between letters
-            }
-        }
-        tapStartTime = now
+        tapStartTime = Date()
         startContinuousHaptic()
     }
 
@@ -47,15 +36,8 @@ class UserViewModel: ObservableObject {
         let duration = Date().timeIntervalSince(startTime)
         tapStartTime = nil
         stopContinuousHaptic()
-        
-        recentDurations.append(duration)
-        if recentDurations.count > 10 {
-            recentDurations.removeFirst()
-        }
 
-        let minDur = recentDurations.min() ?? 0
-        let maxDur = recentDurations.max() ?? 1
-        let threshold = (minDur + maxDur) / 2
+        let threshold = 0.15  // hardcoded threshold between dot and dash
 
         if duration < threshold {
             morseInput.append("·")
@@ -63,7 +45,6 @@ class UserViewModel: ObservableObject {
             playAudioFeedback("dot")
         } else {
             morseInput.append("−")
-           
             playAudioFeedback("dash")
         }
         lastTapEndTime = Date()
@@ -130,6 +111,11 @@ class UserViewModel: ObservableObject {
 
     func toggleAudioFeedback() {
         audioFeedbackEnabled.toggle()
+    }
+
+    func handleLetterGap() {
+        stopContinuousHaptic()  // stop any ongoing continuous haptic
+        morseInput.append("|")  // separator between letters
     }
 }
 

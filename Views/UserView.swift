@@ -47,11 +47,14 @@ struct UserView: View {
                     }
                     .onEnded { value in
                         isPressing = false
-                        // Detect swipe up: if vertical translation is sufficiently negative, treat as send
                         if value.translation.height < -50 {
-                            // TODO: call send handler, e.g., viewModel.handleDoubleTap() if that's intended
+                            // Swipe up → send the full message
                             viewModel.handleDoubleTap()
+                        } else if value.translation.width > 50 {
+                            // Swipe right → letter gap
+                            viewModel.handleLetterGap()
                         } else {
+                            // Normal tap end → dot or dash
                             viewModel.handleTapEnd()
                         }
                     }
