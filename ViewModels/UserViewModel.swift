@@ -20,6 +20,7 @@ class UserViewModel: ObservableObject {
     private var hapticEngine: CHHapticEngine?
     private var tapStartTime: Date?
     private var recentDurations: [TimeInterval] = []
+    private var continuousPlayer: CHHapticAdvancedPatternPlayer?
 
     init() {
         prepareHaptics()
@@ -27,38 +28,37 @@ class UserViewModel: ObservableObject {
 
     func handleTapStart() {
         tapStartTime = Date()
+        startContinuousHaptic()
     }
 
     func handleTapEnd() {
         guard let startTime = tapStartTime else { return }
         let duration = Date().timeIntervalSince(startTime)
         tapStartTime = nil
-
-        // Save to recentDurations (keep max 10)
+        stopContinuousHaptic()
+        
         recentDurations.append(duration)
         if recentDurations.count > 10 {
             recentDurations.removeFirst()
         }
 
-        // Calculate dynamic threshold
         let minDur = recentDurations.min() ?? 0
         let maxDur = recentDurations.max() ?? 1
         let threshold = (minDur + maxDur) / 2
 
-        // Determine dot or dash based on adaptive threshold
         if duration < threshold {
             morseInput.append("·")
-            playHaptic(type: .light)
             playAudioFeedback("dot")
         } else {
             morseInput.append("−")
-            playHaptic(type: .medium)
             playAudioFeedback("dash")
         }
     }
 
     func handleDoubleTap() {
-        // Decode Morse to text
+        stopContinuousHaptic()  // Ensure no leftover vibration
+        playSendHaptic()        // Play confirmation haptic
+
         let converter = MorseCodeConverter()
         decodedText = converter.morseToText(morseInput)
         playAudioFeedback("message sent")
@@ -81,10 +81,32 @@ class UserViewModel: ObservableObject {
         }
     }
 
-    private func playHaptic(type: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let generator = UIImpactFeedbackGenerator(style: type)
-        generator.prepare()
-        generator.impactOccurred()
+    // private func playHaptic(type: UIImpactFeedbackGenerator.FeedbackStyle) {
+    //     let generator = UIImpactFeedbackGenerator(style: type)
+    //     generator.prepare()
+    //     generator.impactOccurred()
+    // }
+
+    private func startContinuousHaptic() {
+        guard let hapticEngine = hapticEngine else { return }
+        do {
+            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.5)
+            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.5)
+            let event = CHHapticEvent(eventType: .hapticContinuous, parameters: [intensity, sharpness], relativeTime: 0, duration: 10.0)
+            let pattern = try CHHapticPattern(events: [event], parameters: [])
+            continuousPlayer = try hapticEngine.makeAdvancedPlayer(with: pattern)
+            try continuousPlayer?.start(atTime: 0)
+        } catch {
+            print("Failed to start continuous haptic: \(error.localizedDescription)")
+        }
+    }
+
+    private func stopContinuousHaptic() {
+        do {
+            try continuousPlayer?.stop(atTime: 0)
+        } catch {
+            print("Failed to stop continuous haptic: \(error.localizedDescription)")
+        }
     }
 
     func reset() {
@@ -97,3 +119,8 @@ class UserViewModel: ObservableObject {
     }
 }
 
+
+    private func playSendHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
