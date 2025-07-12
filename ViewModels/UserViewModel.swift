@@ -19,6 +19,7 @@ class UserViewModel: ObservableObject {
     private var speechSynthesizer = AVSpeechSynthesizer()
     private var hapticEngine: CHHapticEngine?
     private var tapStartTime: Date?
+    private var recentDurations: [TimeInterval] = []
 
     init() {
         prepareHaptics()
@@ -31,14 +32,25 @@ class UserViewModel: ObservableObject {
     func handleTapEnd() {
         guard let startTime = tapStartTime else { return }
         let duration = Date().timeIntervalSince(startTime)
+        tapStartTime = nil
 
-        if duration < 0.3 {
-            // Short tap = dot
+        // Save to recentDurations (keep max 10)
+        recentDurations.append(duration)
+        if recentDurations.count > 10 {
+            recentDurations.removeFirst()
+        }
+
+        // Calculate dynamic threshold
+        let minDur = recentDurations.min() ?? 0
+        let maxDur = recentDurations.max() ?? 1
+        let threshold = (minDur + maxDur) / 2
+
+        // Determine dot or dash based on adaptive threshold
+        if duration < threshold {
             morseInput.append("·")
             playHaptic(type: .light)
             playAudioFeedback("dot")
         } else {
-            // Long tap = dash
             morseInput.append("−")
             playHaptic(type: .medium)
             playAudioFeedback("dash")

@@ -30,7 +30,7 @@ struct UserView: View {
 
                 Spacer()
 
-                Text("Tap anywhere: Short tap = dot, Long tap = dash, Double tap = send")
+                Text("Tap anywhere: Tap rhythmically; swipe up to send")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 30)
@@ -47,12 +47,12 @@ struct UserView: View {
                     }
                     .onEnded { value in
                         isPressing = false
-                        viewModel.handleTapEnd()
-
-                        // Check if swipe up
-                        if value.translation.height < -30 {
-                            // Negative height means upward swipe
+                        // Detect swipe up: if vertical translation is sufficiently negative, treat as send
+                        if value.translation.height < -50 {
+                            // TODO: call send handler, e.g., viewModel.handleDoubleTap() if that's intended
                             viewModel.handleDoubleTap()
+                        } else {
+                            viewModel.handleTapEnd()
                         }
                     }
             )
