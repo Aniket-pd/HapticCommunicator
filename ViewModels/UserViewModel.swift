@@ -115,7 +115,10 @@ class UserViewModel: ObservableObject {
 
     func handleLetterGap() {
         stopContinuousHaptic()  // stop any ongoing continuous haptic
-        morseInput.append("|")  // separator between letters
+        morseInput.append(" ")  // separator between letters
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
+        generator.prepare()
+        generator.impactOccurred()
     }
 }
 
