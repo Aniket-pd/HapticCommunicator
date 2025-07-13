@@ -55,7 +55,7 @@ class UserViewModel: ObservableObject {
         playSendHaptic()        // Play confirmation haptic
 
         let converter = MorseCodeConverter()
-        decodedText = converter.morseToText(morseInput)
+        decodedText += converter.morseToText(morseInput) + " "
         playAudioFeedback("message sent")
         morseInput = ""
     }

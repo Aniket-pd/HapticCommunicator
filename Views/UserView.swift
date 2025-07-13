@@ -15,18 +15,22 @@ struct UserView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                Spacer()
+                HStack {
+                    Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                .padding(.horizontal)
 
-                Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
-
-                Text(viewModel.morseInput)
-                    .font(.system(size: 28, design: .monospaced))
-                    .foregroundColor(.primary)
-                    .padding(.horizontal)
+                HStack {
+                    Text(viewModel.morseInput)
+                        .font(.system(size: 28, design: .monospaced))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                .padding(.horizontal)
 
                 Spacer()
 
@@ -61,6 +65,7 @@ struct UserView: View {
             )
             .padding()
             .navigationTitle("User Mode")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
