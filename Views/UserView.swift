@@ -17,9 +17,19 @@ struct UserView: View {
             VStack(spacing: 20) {
                 HStack {
                     Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
-                        .font(.title3)
-                        .foregroundColor(.secondary)
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundColor(Color.primary)
                         .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                .padding(.horizontal)
+
+                HStack {
+                    Text(viewModel.morseHistory.isEmpty ? "Morse code history will appear here" : viewModel.morseHistory)
+                        .font(.system(size: 14, design: .monospaced))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(nil)
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -64,7 +74,6 @@ struct UserView: View {
                     }
             )
             .padding()
-            .navigationTitle("User Mode")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

@@ -15,6 +15,7 @@ class UserViewModel: ObservableObject {
     @Published var morseInput: String = ""
     @Published var decodedText: String = ""
     @Published var audioFeedbackEnabled: Bool = true
+    @Published var morseHistory: String = ""
 
     private var speechSynthesizer = AVSpeechSynthesizer()
     private var hapticEngine: CHHapticEngine?
@@ -41,10 +42,12 @@ class UserViewModel: ObservableObject {
 
         if duration < threshold {
             morseInput.append("·")
+            morseHistory.append("·")
             playDotHaptic()  // short sharp haptic for dot
             playAudioFeedback("dot")
         } else {
             morseInput.append("−")
+            morseHistory.append("−")
             playAudioFeedback("dash")
         }
         lastTapEndTime = Date()
@@ -56,6 +59,7 @@ class UserViewModel: ObservableObject {
 
         let converter = MorseCodeConverter()
         decodedText += converter.morseToText(morseInput) + " "
+        morseHistory.append(" / ")
         playAudioFeedback("message sent")
         morseInput = ""
     }
@@ -116,6 +120,7 @@ class UserViewModel: ObservableObject {
     func handleLetterGap() {
         stopContinuousHaptic()  // stop any ongoing continuous haptic
         morseInput.append(" ")  // separator between letters
+        morseHistory.append(" ")
         let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.prepare()
         generator.impactOccurred()
