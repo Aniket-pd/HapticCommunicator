@@ -22,6 +22,7 @@ class UserViewModel: ObservableObject {
     private var tapStartTime: Date?
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
     private var lastTapEndTime: Date?
+    private var audioEngine = AVAudioEngine()
 
     init() {
         prepareHaptics()
@@ -44,11 +45,51 @@ class UserViewModel: ObservableObject {
             morseInput.append("·")
             morseHistory.append("·")
             playDotHaptic()  // short sharp haptic for dot
+            playDotBeep()
         } else {
             morseInput.append("−")
             morseHistory.append("−")
+            playDashBeep()
         }
         lastTapEndTime = Date()
+    }
+    private func playBeep(frequency: Double, duration: Double) {
+        let sampleRate = 44100
+        let frameCount = AVAudioFrameCount(duration * Double(sampleRate))
+        let format = AVAudioFormat(standardFormatWithSampleRate: Double(sampleRate), channels: 1)!
+
+        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount)!
+        buffer.frameLength = frameCount
+
+        let theta = 2.0 * Double.pi * frequency / Double(sampleRate)
+        for i in 0..<Int(frameCount) {
+            var sample = sin(theta * Double(i))
+            let progress = Double(i) / Double(frameCount)
+            let fadeInFactor = min(1.0, progress * 5.0)  // fade in over ~20% of duration
+            let fadeOutFactor = 1.0 - progress           // fade out over entire duration
+            sample *= fadeInFactor * fadeOutFactor
+            buffer.floatChannelData!.pointee[i] = Float32(sample)
+        }
+
+        let playerNode = AVAudioPlayerNode()
+        audioEngine.attach(playerNode)
+        audioEngine.connect(playerNode, to: audioEngine.mainMixerNode, format: format)
+
+        try? audioEngine.start()
+        playerNode.scheduleBuffer(buffer, at: nil, options: .interrupts, completionHandler: {
+            DispatchQueue.main.async {
+                playerNode.stop()
+            }
+        })
+        playerNode.play()
+    }
+
+    func playDotBeep() {
+        playBeep(frequency: 440, duration: 0.1)
+    }
+
+    func playDashBeep() {
+        playBeep(frequency: 440, duration: 0.3)
     }
 
     func handleDoubleTap() {
