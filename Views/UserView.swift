@@ -11,6 +11,7 @@ import SwiftUI
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @State private var isPressing = false
+    @State private var showHelloWorld = false
 
     var body: some View {
         NavigationStack {
@@ -73,6 +74,14 @@ struct UserView: View {
                         }
                     }
             )
+            .simultaneousGesture(
+                LongPressGesture(minimumDuration: 2)
+                    .onEnded { _ in
+                        withAnimation {
+                            showHelloWorld = true
+                        }
+                    }
+            )
             .padding()
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -85,6 +94,24 @@ struct UserView: View {
                     .accessibilityLabel("Toggle audio feedback")
                 }
             }
+            .overlay(
+                Group {
+                    if showHelloWorld {
+                        Color.black.opacity(0.6)
+                            .ignoresSafeArea()
+                            .overlay(
+                                Text("Hello World")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.white)
+                            )
+                            .onTapGesture {
+                                withAnimation {
+                                    showHelloWorld = false
+                                }
+                            }
+                    }
+                }
+            )
         }
     }
 }
