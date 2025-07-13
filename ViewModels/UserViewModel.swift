@@ -44,11 +44,9 @@ class UserViewModel: ObservableObject {
             morseInput.append("·")
             morseHistory.append("·")
             playDotHaptic()  // short sharp haptic for dot
-            playAudioFeedback("dot")
         } else {
             morseInput.append("−")
             morseHistory.append("−")
-            playAudioFeedback("dash")
         }
         lastTapEndTime = Date()
     }
@@ -58,9 +56,10 @@ class UserViewModel: ObservableObject {
         playSendHaptic()        // Play confirmation haptic
 
         let converter = MorseCodeConverter()
-        decodedText += converter.morseToText(morseInput) + " "
+        let decoded = converter.morseToText(morseInput)
+        decodedText += decoded + " "
         morseHistory.append(" / ")
-        playAudioFeedback("message sent")
+        playAudioFeedback(decoded)
         morseInput = ""
     }
 
