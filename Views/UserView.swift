@@ -19,31 +19,33 @@ struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @State private var isPressing = false
     @State private var showHelloWorld = false
-    @State private var messageHistory: [Message] = []
+    @State private var messageHistory: [Message] = [
+        Message(text: "Decoded text will be displayed here", morse: "Morse code history will appear here", isSpeech: false)
+    ]
     @State private var liveRecognizedText: String = ""
     @State private var liveMorseText: String = ""
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                HStack {
-                    Spacer()
-                    Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(Color.primary)
-                        .multilineTextAlignment(.trailing)
-                }
-                .padding(.horizontal)
+                // HStack {
+                //     Spacer()
+                //     Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
+                //         .font(.system(size: 22, weight: .semibold))
+                //         .foregroundColor(Color.primary)
+                //         .multilineTextAlignment(.trailing)
+                // }
+                // .padding(.horizontal)
 
-                HStack {
-                    Spacer()
-                    Text(viewModel.morseHistory.isEmpty ? "Morse code history will appear here" : viewModel.morseHistory)
-                        .font(.system(size: 14, design: .monospaced))
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.trailing)
-                        .lineLimit(nil)
-                }
-                .padding(.horizontal)
+                // HStack {
+                //     Spacer()
+                //     Text(viewModel.morseHistory.isEmpty ? "Morse code history will appear here" : viewModel.morseHistory)
+                //         .font(.system(size: 14, design: .monospaced))
+                //         .foregroundColor(.gray)
+                //         .multilineTextAlignment(.trailing)
+                //         .lineLimit(nil)
+                // }
+                // .padding(.horizontal)
 
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(messageHistory) { message in
@@ -107,6 +109,12 @@ struct UserView: View {
                     .onChanged { value in
                         if !isPressing {
                             isPressing = true
+
+                            // Remove intro message if present
+                            if let first = messageHistory.first, first.text == "Decoded text will be displayed here" {
+                                messageHistory.removeFirst()
+                            }
+
                             viewModel.handleTapStart()
                         }
                     }
