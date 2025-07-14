@@ -168,12 +168,29 @@ struct UserView: View {
                         withAnimation {
                             showHelloWorld = true
                         }
-                        viewModel.startListening { text in
-                            let converter = MorseCodeConverter()
-                            let morse = converter.textToMorse(text)
-                            liveRecognizedText = text
-                            liveMorseText = morse
-                        }
+                        viewModel.startListening(
+                            onResult: { text in
+                                let converter = MorseCodeConverter()
+                                let morse = converter.textToMorse(text)
+                                liveRecognizedText = text
+                                liveMorseText = morse
+                            },
+                            onTimeout: {
+                                withAnimation {
+                                    showHelloWorld = false
+                                }
+                                viewModel.stopListening()
+                                if !liveRecognizedText.isEmpty {
+                                    messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
+                                    
+                                    caregiverViewModel.morseCode = liveMorseText
+                                    caregiverViewModel.startVibration()
+                                    
+                                    liveRecognizedText = ""
+                                    liveMorseText = ""
+                                }
+                            }
+                        )
                     }
             )
             .padding()

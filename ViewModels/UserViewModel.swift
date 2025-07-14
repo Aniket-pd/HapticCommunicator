@@ -13,6 +13,7 @@ import UIKit
 import Speech
 
 class UserViewModel: ObservableObject {
+    private var silenceTimer: Timer?
     @Published var morseInput: String = ""
     @Published var decodedText: String = ""
     @Published var audioFeedbackEnabled: Bool = true
@@ -31,6 +32,8 @@ class UserViewModel: ObservableObject {
     private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+
+    private var lastSpeechResultTime: Date?
 
     init() {
         prepareHaptics()
@@ -163,7 +166,7 @@ class UserViewModel: ObservableObject {
         generator.impactOccurred()
     }
     
-    func startListening(onResult: @escaping (String) -> Void) {
+    func startListening(onResult: @escaping (String) -> Void, onTimeout: @escaping () -> Void) {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             guard authStatus == .authorized else {
                 print("Speech recognition not authorized")
@@ -187,6 +190,7 @@ class UserViewModel: ObservableObject {
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { result, error in
             if let result = result {
                 print("Received partial result: \(result.bestTranscription.formattedString)")
+                self.lastSpeechResultTime = Date()
                 DispatchQueue.main.async {
                     onResult(result.bestTranscription.formattedString)
                 }
@@ -221,9 +225,25 @@ class UserViewModel: ObservableObject {
         } catch {
             print("AudioEngine couldn't start: \(error.localizedDescription)")
         }
+
+        silenceTimer?.invalidate()
+        silenceTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            if let lastTime = self.lastSpeechResultTime {
+                let silenceDuration = Date().timeIntervalSince(lastTime)
+                if silenceDuration >= 3 {
+                    DispatchQueue.main.async {
+                        timer.invalidate()
+                        self.silenceTimer = nil
+                        onTimeout()
+                    }
+                }
+            }
+        }
     }
 
     func stopListening() {
+        silenceTimer?.invalidate()
+        silenceTimer = nil
         print("Stopping speech recognition...")
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
