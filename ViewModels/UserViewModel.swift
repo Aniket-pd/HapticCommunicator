@@ -10,6 +10,7 @@ import AVFoundation
 import CoreHaptics
 import Combine
 import UIKit
+import Speech
 
 class UserViewModel: ObservableObject {
     @Published var morseInput: String = ""
@@ -23,6 +24,10 @@ class UserViewModel: ObservableObject {
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
     private var lastTapEndTime: Date?
     private var audioEngine = AVAudioEngine()
+
+    private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
 
     init() {
         prepareHaptics()
@@ -164,6 +169,83 @@ class UserViewModel: ObservableObject {
         let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.prepare()
         generator.impactOccurred()
+    }
+    
+    func startListening(onResult: @escaping (String) -> Void) {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            guard authStatus == .authorized else {
+                print("Speech recognition not authorized")
+                return
+            }
+            print("Starting speech recognition...")
+        }
+
+        // Stop and remove previous tap if needed before setting up a new one
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            audioEngine.inputNode.removeTap(onBus: 0)
+        }
+
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        guard let recognitionRequest = recognitionRequest else { return }
+
+        let inputNode = audioEngine.inputNode
+        recognitionRequest.shouldReportPartialResults = true
+
+        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { result, error in
+            if let result = result {
+                print("Received partial result: \(result.bestTranscription.formattedString)")
+                DispatchQueue.main.async {
+                    onResult(result.bestTranscription.formattedString)
+                }
+            }
+            if error != nil || result?.isFinal == true {
+                print("Speech recognition ended or error: \(String(describing: error))")
+                self.audioEngine.stop()
+                inputNode.removeTap(onBus: 0)
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
+            }
+        }
+
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, when in
+            self.recognitionRequest?.append(buffer)
+        }
+
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+            try session.setActive(true)
+            try session.overrideOutputAudioPort(.speaker)
+            print("Audio session set to playAndRecord with defaultToSpeaker and speaker override")
+        } catch {
+            print("Failed to configure audio session: \(error.localizedDescription)")
+        }
+
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            print("AudioEngine couldn't start: \(error.localizedDescription)")
+        }
+    }
+
+    func stopListening() {
+        print("Stopping speech recognition...")
+        audioEngine.stop()
+        audioEngine.inputNode.removeTap(onBus: 0)
+        recognitionRequest?.endAudio()
+        recognitionTask?.cancel()
+        recognitionRequest = nil
+        recognitionTask = nil
+        audioEngine.reset()
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            print("AVAudioSession deactivated")
+        } catch {
+            print("Failed to deactivate AVAudioSession: \(error.localizedDescription)")
+        }
     }
 }
 

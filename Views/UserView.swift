@@ -12,6 +12,7 @@ struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @State private var isPressing = false
     @State private var showHelloWorld = false
+    @State private var recognizedText = ""
 
     var body: some View {
         NavigationStack {
@@ -80,6 +81,9 @@ struct UserView: View {
                         withAnimation {
                             showHelloWorld = true
                         }
+                        viewModel.startListening { text in
+                            recognizedText = text
+                        }
                     }
             )
             .padding()
@@ -100,14 +104,21 @@ struct UserView: View {
                         Color.black.opacity(0.6)
                             .ignoresSafeArea()
                             .overlay(
-                                Text("Hello World")
-                                    .font(.largeTitle)
-                                    .foregroundColor(.white)
+                                VStack(spacing: 20) {
+                                    Text("Hello World")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.white)
+                                    Text(recognizedText.isEmpty ? "Listening..." : recognizedText)
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .padding()
+                                }
                             )
                             .onTapGesture {
                                 withAnimation {
                                     showHelloWorld = false
                                 }
+                                viewModel.stopListening()
                             }
                     }
                 }

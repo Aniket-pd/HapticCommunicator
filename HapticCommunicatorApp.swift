@@ -6,12 +6,23 @@
 //
 
 import SwiftUI
+import Speech
 
 @main
 struct HapticCommunicatorApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .onAppear {
+                    SFSpeechRecognizer.requestAuthorization { authStatus in
+                        switch authStatus {
+                        case .authorized:
+                            print("Speech recognition authorized")
+                        default:
+                            print("Speech recognition NOT authorized")
+                        }
+                    }
+                }
         }
     }
 }
