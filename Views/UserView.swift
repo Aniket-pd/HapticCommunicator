@@ -64,23 +64,6 @@ struct UserView: View {
                                     Spacer()
                                 }
                             }
-                        } else {
-                            VStack(alignment: .trailing, spacing: 2) {
-                                HStack {
-                                    Spacer()
-                                    Text(message.text)
-                                        .font(.system(size: 22, weight: .semibold))
-                                        .foregroundColor(Color.primary)
-                                        .multilineTextAlignment(.trailing)
-                                }
-                                HStack {
-                                    Spacer()
-                                    Text(message.morse)
-                                        .font(.system(size: 14, design: .monospaced))
-                                        .foregroundColor(.gray)
-                                        .multilineTextAlignment(.trailing)
-                                }
-                            }
                         }
                     }
                 }
@@ -114,11 +97,9 @@ struct UserView: View {
                     .onEnded { value in
                         isPressing = false
                         if value.translation.height < -50 {
-                            // Swipe up → send the full message
+                            // Swipe up → send the full decoded message (just update live, don't add to history)
                             viewModel.handleDoubleTap()
-                            messageHistory.append(Message(text: viewModel.decodedText, morse: viewModel.morseHistory, isSpeech: false))
-                            viewModel.decodedText = ""
-                            viewModel.morseHistory = ""
+                            // Keep decodedText and morseHistory live; do not append to messageHistory
                         } else if value.translation.width > 50 {
                             // Swipe right → letter gap
                             viewModel.handleLetterGap()
