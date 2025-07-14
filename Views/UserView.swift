@@ -13,6 +13,7 @@ struct UserView: View {
     @State private var isPressing = false
     @State private var showHelloWorld = false
     @State private var recognizedText = ""
+    @State private var speechMorseCode = ""
 
     var body: some View {
         NavigationStack {
@@ -33,6 +34,24 @@ struct UserView: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
                     Spacer()
+                }
+                .padding(.horizontal)
+
+                HStack {
+                    Spacer()
+                    Text(recognizedText.isEmpty ? "Speech will appear here" : recognizedText)
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundColor(Color.primary)
+                        .multilineTextAlignment(.trailing)
+                }
+                .padding(.horizontal)
+                
+                HStack {
+                    Spacer()
+                    Text(speechMorseCode.isEmpty ? "Speech Morse code will appear here" : speechMorseCode)
+                        .font(.system(size: 14, design: .monospaced))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.trailing)
                 }
                 .padding(.horizontal)
 
@@ -83,6 +102,8 @@ struct UserView: View {
                         }
                         viewModel.startListening { text in
                             recognizedText = text
+                            let converter = MorseCodeConverter()
+                            speechMorseCode = converter.textToMorse(text)
                         }
                     }
             )
@@ -132,3 +153,4 @@ struct UserView_Previews: PreviewProvider {
         UserView()
     }
 }
+
