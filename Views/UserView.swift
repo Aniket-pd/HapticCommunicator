@@ -8,12 +8,18 @@
 
 import SwiftUI
 
+struct Message: Identifiable {
+    let id = UUID()
+    let text: String
+    let morse: String
+    let isSpeech: Bool // true = speech, false = decoded
+}
+
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @State private var isPressing = false
     @State private var showHelloWorld = false
-    @State private var recognizedHistory: [String] = []
-    @State private var speechMorseHistory: [String] = []
+    @State private var messageHistory: [Message] = []
     @State private var liveRecognizedText: String = ""
     @State private var liveMorseText: String = ""
 
@@ -40,20 +46,41 @@ struct UserView: View {
                 .padding(.horizontal)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    ForEach(Array(recognizedHistory.enumerated()), id: \.offset) { index, item in
-                        HStack {
-                            Text(item)
-                                .font(.system(size: 22, weight: .semibold))
-                                .foregroundColor(Color.primary)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                        }
-                        HStack {
-                            Text(speechMorseHistory[index])
-                                .font(.system(size: 14, design: .monospaced))
-                                .foregroundColor(.gray)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
+                    ForEach(messageHistory) { message in
+                        if message.isSpeech {
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack {
+                                    Text(message.text)
+                                        .font(.system(size: 22, weight: .semibold))
+                                        .foregroundColor(Color.primary)
+                                        .multilineTextAlignment(.leading)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Text(message.morse)
+                                        .font(.system(size: 14, design: .monospaced))
+                                        .foregroundColor(.gray)
+                                        .multilineTextAlignment(.leading)
+                                    Spacer()
+                                }
+                            }
+                        } else {
+                            VStack(alignment: .trailing, spacing: 2) {
+                                HStack {
+                                    Spacer()
+                                    Text(message.text)
+                                        .font(.system(size: 22, weight: .semibold))
+                                        .foregroundColor(Color.primary)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                                HStack {
+                                    Spacer()
+                                    Text(message.morse)
+                                        .font(.system(size: 14, design: .monospaced))
+                                        .foregroundColor(.gray)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
                         }
                     }
                 }
@@ -89,6 +116,9 @@ struct UserView: View {
                         if value.translation.height < -50 {
                             // Swipe up → send the full message
                             viewModel.handleDoubleTap()
+                            messageHistory.append(Message(text: viewModel.decodedText, morse: viewModel.morseHistory, isSpeech: false))
+                            viewModel.decodedText = ""
+                            viewModel.morseHistory = ""
                         } else if value.translation.width > 50 {
                             // Swipe right → letter gap
                             viewModel.handleLetterGap()
@@ -123,6 +153,11 @@ struct UserView: View {
                     }
                     .accessibilityLabel("Toggle audio feedback")
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Clear History") {
+                        messageHistory.removeAll()
+                    }
+                }
             }
             .overlay(
                 Group {
@@ -146,8 +181,7 @@ struct UserView: View {
                                 }
                                 viewModel.stopListening()
                                 if !liveRecognizedText.isEmpty {
-                                    recognizedHistory.append(liveRecognizedText)
-                                    speechMorseHistory.append(liveMorseText)
+                                    messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
                                     liveRecognizedText = ""
                                     liveMorseText = ""
                                 }
