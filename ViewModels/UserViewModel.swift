@@ -24,6 +24,9 @@ class UserViewModel: ObservableObject {
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
     private var lastTapEndTime: Date?
     private var audioEngine = AVAudioEngine()
+    
+    var dotPlayer: AVAudioPlayer?
+    var dashPlayer: AVAudioPlayer?
 
     private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -31,6 +34,7 @@ class UserViewModel: ObservableObject {
 
     init() {
         prepareHaptics()
+        prepareBeepSounds()
     }
 
     func handleTapStart() {
@@ -58,43 +62,15 @@ class UserViewModel: ObservableObject {
         }
         lastTapEndTime = Date()
     }
-    private func playBeep(frequency: Double, duration: Double) {
-        let sampleRate = 44100
-        let frameCount = AVAudioFrameCount(duration * Double(sampleRate))
-        let format = AVAudioFormat(standardFormatWithSampleRate: Double(sampleRate), channels: 1)!
-
-        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount)!
-        buffer.frameLength = frameCount
-
-        let theta = 2.0 * Double.pi * frequency / Double(sampleRate)
-        for i in 0..<Int(frameCount) {
-            var sample = sin(theta * Double(i))
-            let progress = Double(i) / Double(frameCount)
-            let fadeInFactor = min(1.0, progress * 5.0)  // fade in over ~20% of duration
-            let fadeOutFactor = 1.0 - progress           // fade out over entire duration
-            sample *= fadeInFactor * fadeOutFactor
-            buffer.floatChannelData!.pointee[i] = Float32(sample)
-        }
-
-        let playerNode = AVAudioPlayerNode()
-        audioEngine.attach(playerNode)
-        audioEngine.connect(playerNode, to: audioEngine.mainMixerNode, format: format)
-
-        try? audioEngine.start()
-        playerNode.scheduleBuffer(buffer, at: nil, options: .interrupts, completionHandler: {
-            DispatchQueue.main.async {
-                playerNode.stop()
-            }
-        })
-        playerNode.play()
-    }
 
     func playDotBeep() {
-        playBeep(frequency: 440, duration: 0.1)
+        dotPlayer?.currentTime = 0
+        dotPlayer?.play()
     }
 
     func playDashBeep() {
-        playBeep(frequency: 440, duration: 0.3)
+        dashPlayer?.currentTime = 0
+        dashPlayer?.play()
     }
 
     func handleDoubleTap() {
@@ -122,6 +98,22 @@ class UserViewModel: ObservableObject {
             try hapticEngine?.start()
         } catch {
             print("Haptic engine error: \(error.localizedDescription)")
+        }
+    }
+    
+    private func prepareBeepSounds() {
+        if let dotData = NSDataAsset(name: "dot")?.data,
+           let dashData = NSDataAsset(name: "dash")?.data {
+            do {
+                dotPlayer = try AVAudioPlayer(data: dotData, fileTypeHint: "wav")
+                dashPlayer = try AVAudioPlayer(data: dashData, fileTypeHint: "wav")
+                dotPlayer?.prepareToPlay()
+                dashPlayer?.prepareToPlay()
+            } catch {
+                print("Audio setup failed: \(error.localizedDescription)")
+            }
+        } else {
+            print("Audio assets 'dot' or 'dash' not found!")
         }
     }
 
