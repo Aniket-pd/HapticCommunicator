@@ -17,6 +17,7 @@ struct Message: Identifiable {
 
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
+    @StateObject private var caregiverViewModel = CaregiverViewModel()
     @State private var isPressing = false
     @State private var showHelloWorld = false
     @State private var messageHistory: [Message] = [
@@ -215,6 +216,10 @@ struct UserView: View {
                                 viewModel.stopListening()
                                 if !liveRecognizedText.isEmpty {
                                     messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
+                                    
+                                    caregiverViewModel.morseCode = liveMorseText
+                                    caregiverViewModel.startVibration()
+                                    
                                     liveRecognizedText = ""
                                     liveMorseText = ""
                                 }
