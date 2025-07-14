@@ -47,45 +47,58 @@ struct UserView: View {
                 // }
                 // .padding(.horizontal)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    ForEach(messageHistory) { message in
-                        VStack(alignment: message.isSpeech ? .leading : .trailing, spacing: 2) {
-                            HStack {
-                                if message.isSpeech {
-                                    Text(message.text)
-                                        .font(.system(size: 22, weight: .semibold))
-                                        .foregroundColor(Color.primary)
-                                        .multilineTextAlignment(.leading)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    Text(message.text)
-                                        .font(.system(size: 22, weight: .semibold))
-                                        .foregroundColor(Color.primary)
-                                        .multilineTextAlignment(.trailing)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(messageHistory) { message in
+                                VStack(alignment: message.isSpeech ? .leading : .trailing, spacing: 2) {
+                                    HStack {
+                                        if message.isSpeech {
+                                            Text(message.text)
+                                                .font(.system(size: 22, weight: .semibold))
+                                                .foregroundColor(Color.primary)
+                                                .multilineTextAlignment(.leading)
+                                            Spacer()
+                                        } else {
+                                            Spacer()
+                                            Text(message.text)
+                                                .font(.system(size: 22, weight: .semibold))
+                                                .foregroundColor(Color.primary)
+                                                .multilineTextAlignment(.trailing)
+                                        }
+                                    }
+                                    HStack {
+                                        if message.isSpeech {
+                                            Text(message.morse)
+                                                .font(.system(size: 14, design: .monospaced))
+                                                .foregroundColor(.gray)
+                                                .multilineTextAlignment(.leading)
+                                            Spacer()
+                                        } else {
+                                            Spacer()
+                                            Text(message.morse)
+                                                .font(.system(size: 14, design: .monospaced))
+                                                .foregroundColor(.gray)
+                                                .multilineTextAlignment(.trailing)
+                                        }
+                                    }
                                 }
-                            }
-                            HStack {
-                                if message.isSpeech {
-                                    Text(message.morse)
-                                        .font(.system(size: 14, design: .monospaced))
-                                        .foregroundColor(.gray)
-                                        .multilineTextAlignment(.leading)
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    Text(message.morse)
-                                        .font(.system(size: 14, design: .monospaced))
-                                        .foregroundColor(.gray)
-                                        .multilineTextAlignment(.trailing)
-                                }
+                                .frame(maxWidth: .infinity, alignment: message.isSpeech ? .leading : .trailing)
+                                .padding(.vertical, 8)
+                                .id(message.id)
                             }
                         }
-                        .frame(maxWidth: .infinity, alignment: message.isSpeech ? .leading : .trailing)
-                        .padding(.vertical, 8)
+                        .padding(.horizontal)
+                    }
+                    .frame(height: 200) // Adjust this height to show ~2 message blocks
+                    .onChange(of: messageHistory.count) { _ in
+                        if let last = messageHistory.last {
+                            withAnimation {
+                                proxy.scrollTo(last.id, anchor: .bottom)
+                            }
+                        }
                     }
                 }
-                .padding(.horizontal)
 
                 HStack {
                     Text(viewModel.morseInput)
