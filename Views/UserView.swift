@@ -12,46 +12,50 @@ struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @State private var isPressing = false
     @State private var showHelloWorld = false
-    @State private var recognizedText = ""
-    @State private var speechMorseCode = ""
+    @State private var recognizedHistory: [String] = []
+    @State private var speechMorseHistory: [String] = []
+    @State private var liveRecognizedText: String = ""
+    @State private var liveMorseText: String = ""
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
                 HStack {
+                    Spacer()
                     Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
                         .font(.system(size: 22, weight: .semibold))
                         .foregroundColor(Color.primary)
-                        .multilineTextAlignment(.leading)
-                    Spacer()
+                        .multilineTextAlignment(.trailing)
                 }
                 .padding(.horizontal)
 
                 HStack {
+                    Spacer()
                     Text(viewModel.morseHistory.isEmpty ? "Morse code history will appear here" : viewModel.morseHistory)
                         .font(.system(size: 14, design: .monospaced))
                         .foregroundColor(.gray)
-                        .multilineTextAlignment(.leading)
+                        .multilineTextAlignment(.trailing)
                         .lineLimit(nil)
-                    Spacer()
                 }
                 .padding(.horizontal)
 
-                HStack {
-                    Spacer()
-                    Text(recognizedText.isEmpty ? "Speech will appear here" : recognizedText)
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(Color.primary)
-                        .multilineTextAlignment(.trailing)
-                }
-                .padding(.horizontal)
-                
-                HStack {
-                    Spacer()
-                    Text(speechMorseCode.isEmpty ? "Speech Morse code will appear here" : speechMorseCode)
-                        .font(.system(size: 14, design: .monospaced))
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.trailing)
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(Array(recognizedHistory.enumerated()), id: \.offset) { index, item in
+                        HStack {
+                            Text(item)
+                                .font(.system(size: 22, weight: .semibold))
+                                .foregroundColor(Color.primary)
+                                .multilineTextAlignment(.leading)
+                            Spacer()
+                        }
+                        HStack {
+                            Text(speechMorseHistory[index])
+                                .font(.system(size: 14, design: .monospaced))
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.leading)
+                            Spacer()
+                        }
+                    }
                 }
                 .padding(.horizontal)
 
@@ -101,9 +105,10 @@ struct UserView: View {
                             showHelloWorld = true
                         }
                         viewModel.startListening { text in
-                            recognizedText = text
                             let converter = MorseCodeConverter()
-                            speechMorseCode = converter.textToMorse(text)
+                            let morse = converter.textToMorse(text)
+                            liveRecognizedText = text
+                            liveMorseText = morse
                         }
                     }
             )
@@ -129,7 +134,7 @@ struct UserView: View {
                                     Text("Hello World")
                                         .font(.largeTitle)
                                         .foregroundColor(.white)
-                                    Text(recognizedText.isEmpty ? "Listening..." : recognizedText)
+                                    Text(liveRecognizedText.isEmpty ? "Listening..." : liveRecognizedText)
                                         .font(.title2)
                                         .foregroundColor(.white)
                                         .padding()
@@ -140,6 +145,12 @@ struct UserView: View {
                                     showHelloWorld = false
                                 }
                                 viewModel.stopListening()
+                                if !liveRecognizedText.isEmpty {
+                                    recognizedHistory.append(liveRecognizedText)
+                                    speechMorseHistory.append(liveMorseText)
+                                    liveRecognizedText = ""
+                                    liveMorseText = ""
+                                }
                             }
                     }
                 }
@@ -153,4 +164,3 @@ struct UserView_Previews: PreviewProvider {
         UserView()
     }
 }
-
