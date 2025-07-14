@@ -47,24 +47,40 @@ struct UserView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(messageHistory) { message in
-                        if message.isSpeech {
-                            VStack(alignment: .leading, spacing: 2) {
-                                HStack {
+                        VStack(alignment: message.isSpeech ? .leading : .trailing, spacing: 2) {
+                            HStack {
+                                if message.isSpeech {
                                     Text(message.text)
                                         .font(.system(size: 22, weight: .semibold))
                                         .foregroundColor(Color.primary)
                                         .multilineTextAlignment(.leading)
                                     Spacer()
+                                } else {
+                                    Spacer()
+                                    Text(message.text)
+                                        .font(.system(size: 22, weight: .semibold))
+                                        .foregroundColor(Color.primary)
+                                        .multilineTextAlignment(.trailing)
                                 }
-                                HStack {
+                            }
+                            HStack {
+                                if message.isSpeech {
                                     Text(message.morse)
                                         .font(.system(size: 14, design: .monospaced))
                                         .foregroundColor(.gray)
                                         .multilineTextAlignment(.leading)
                                     Spacer()
+                                } else {
+                                    Spacer()
+                                    Text(message.morse)
+                                        .font(.system(size: 14, design: .monospaced))
+                                        .foregroundColor(.gray)
+                                        .multilineTextAlignment(.trailing)
                                 }
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: message.isSpeech ? .leading : .trailing)
+                        .padding(.vertical, 8)
                     }
                 }
                 .padding(.horizontal)
@@ -97,9 +113,24 @@ struct UserView: View {
                     .onEnded { value in
                         isPressing = false
                         if value.translation.height < -50 {
-                            // Swipe up → send the full decoded message (just update live, don't add to history)
                             viewModel.handleDoubleTap()
-                            // Keep decodedText and morseHistory live; do not append to messageHistory
+                            if let lastIndex = messageHistory.indices.last {
+                                if messageHistory[lastIndex].isSpeech {
+                                    // Last was speech → create new decoded block
+                                    messageHistory.append(Message(text: viewModel.decodedText, morse: viewModel.morseHistory, isSpeech: false))
+                                } else {
+                                    // Last was decoded → append new text/morse to existing decoded block
+                                    let updatedText = messageHistory[lastIndex].text + viewModel.decodedText
+                                    let updatedMorse = messageHistory[lastIndex].morse + " " + viewModel.morseHistory
+                                    messageHistory[lastIndex] = Message(text: updatedText, morse: updatedMorse, isSpeech: false)
+                                }
+                            } else {
+                                // No history → first decoded block
+                                messageHistory.append(Message(text: viewModel.decodedText, morse: viewModel.morseHistory, isSpeech: false))
+                            }
+                            // Always clear live input after processing
+                            viewModel.decodedText = ""
+                            viewModel.morseHistory = ""
                         } else if value.translation.width > 50 {
                             // Swipe right → letter gap
                             viewModel.handleLetterGap()
