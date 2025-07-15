@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import CoreHaptics
+import UIKit
 
 class CaregiverViewModel: ObservableObject {
     @Published var inputText: String = ""
@@ -57,7 +58,14 @@ class CaregiverViewModel: ObservableObject {
         for symbol in morse {
             switch symbol {
             case "·":
-                events.append(CHHapticEvent(eventType: .hapticContinuous, parameters: [], relativeTime: time, duration: 0.1))
+                let dotEvent = CHHapticEvent(
+                    eventType: .hapticTransient,
+                    parameters: [
+                        CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
+                        CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.4)
+                    ],
+                    relativeTime: time)
+                events.append(dotEvent)
                 time += 0.2
             case "−":
                 events.append(CHHapticEvent(eventType: .hapticContinuous, parameters: [], relativeTime: time, duration: 0.3))
@@ -67,6 +75,10 @@ class CaregiverViewModel: ObservableObject {
             default:
                 continue
             }
+        }
+
+        if events.isEmpty {
+            return
         }
 
         do {

@@ -79,7 +79,11 @@ struct UserView: View {
                                             Spacer()
                                             Text(message.morse)
                                                 .font(.system(size: 14, design: .monospaced))
-                                                .foregroundColor(.gray)
+                                                .foregroundColor(
+                                                    message.morse == "Morse code history will appear here"
+                                                    ? .gray
+                                                    : (message.isSpeech ? .gray : Color(red: 80/255, green: 200/255, blue: 120/255, opacity: 1))
+                                                )
                                                 .multilineTextAlignment(.trailing)
                                         }
                                     }
