@@ -66,6 +66,7 @@ struct TopTabBar: View {
 // Main HomeView with view switcher
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
+    @StateObject private var settings = SettingsViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -78,14 +79,17 @@ struct HomeView: View {
             ZStack {
                 if selectedTab == .userMode {
                     UserView()
+                        .environmentObject(settings)
                         .transition(.opacity)
                 }
                 if selectedTab == .careTaker {
                     CaregiverView()
+                        .environmentObject(settings)
                         .transition(.opacity)
                 }
                 if selectedTab == .settings {
                     SettingsView()
+                        .environmentObject(settings)
                         .transition(.opacity)
                 }
             }
@@ -95,18 +99,10 @@ struct HomeView: View {
     }
 }
 
-// Placeholder views (replace with your real views)
-struct SettingsView: View {
-    var body: some View {
-        Text("Settings View")
-            .font(.largeTitle)
-            .padding()
-    }
-}
-
 // Preview
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+            .environmentObject(SettingsViewModel())
     }
 }

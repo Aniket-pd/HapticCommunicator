@@ -11,6 +11,7 @@ import Combine
 
 struct CaregiverView: View {
     @StateObject private var viewModel = CaregiverViewModel()
+    @EnvironmentObject var settings: SettingsViewModel
     @FocusState private var isTextEditorFocused: Bool
 
     var body: some View {
@@ -107,7 +108,7 @@ struct CaregiverView: View {
                 .contentShape(Rectangle())
                 .onTapGesture {
                     Task {
-                        await viewModel.startVibration()
+                        await viewModel.startVibration(speed: settings.selectedSpeed)
                         viewModel.isReadyForHandover = false
                     }
                 }
