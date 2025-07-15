@@ -69,43 +69,49 @@ struct CaregiverView: View {
                 Text(viewModel.errorMessage ?? "")
             }
             .sheet(isPresented: $viewModel.isReadyForHandover) {
-                VStack(spacing: 30) {
-                    VStack(spacing: 16) {
-                        Text(viewModel.inputText)
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .multilineTextAlignment(.center)
+                ScrollView {
+                    VStack(spacing: 30) {
+                        VStack(spacing: 16) {
+                            Text(viewModel.inputText)
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
 
-                        HStack(spacing: 4) {
-                            ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
-                                Text(String(char))
-                                    .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
-                                    .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
-                                    .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
-                                    .font(.title3)
+                            ScrollView(.horizontal, showsIndicators: true) {
+                                HStack(spacing: 4) {
+                                    ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
+                                        Text(String(char))
+                                            .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
+                                            .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
+                                            .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
+                                            .font(.title3)
+                                    }
+                                }
                             }
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
                         }
-                        .multilineTextAlignment(.center)
-                    }
-                    .padding(.horizontal)
-
-                    Spacer()
-
-                    Image(systemName: "hand.tap")
-                        .font(.system(size: 40))
-                        .foregroundColor(.gray)
-
-                    Text("Tap Anywhere")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-
-                    Text("hand over your phone to the user and press anywhere to play the vibration")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
                         .padding(.horizontal)
+
+                        Spacer()
+
+                        Image(systemName: "hand.tap")
+                            .font(.system(size: 40))
+                            .foregroundColor(.gray)
+
+                        Text("Tap Anywhere")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+
+                        Text("hand over your phone to the user and press anywhere to play the vibration")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .padding()
                 }
-                .padding()
                 .contentShape(Rectangle())
                 .onTapGesture {
                     Task {
