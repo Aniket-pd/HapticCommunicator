@@ -81,4 +81,6 @@ class SettingsViewModel: ObservableObject {
             print("Haptic engine error: \(error.localizedDescription)")
         }
     }
+        }
+    }
 }

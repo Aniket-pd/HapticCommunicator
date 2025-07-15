@@ -16,8 +16,8 @@ class UserViewModel: ObservableObject {
     private var silenceTimer: Timer?
     @Published var morseInput: String = ""
     @Published var decodedText: String = ""
-    @Published var audioFeedbackEnabled: Bool = true
     @Published var morseHistory: String = ""
+    var settings: SettingsViewModel?
 
     private var speechSynthesizer = AVSpeechSynthesizer()
     private var hapticEngine: CHHapticEngine?
@@ -67,11 +67,13 @@ class UserViewModel: ObservableObject {
     }
 
     func playDotBeep() {
+        guard settings?.beepSoundEnabled ?? true else { return }
         dotPlayer?.currentTime = 0
         dotPlayer?.play()
     }
 
     func playDashBeep() {
+        guard settings?.beepSoundEnabled ?? true else { return }
         dashPlayer?.currentTime = 0
         dashPlayer?.play()
     }
@@ -89,7 +91,7 @@ class UserViewModel: ObservableObject {
     }
 
     private func playAudioFeedback(_ text: String) {
-        guard audioFeedbackEnabled else { return }
+        guard settings?.speechSoundEnabled ?? true else { return }
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         speechSynthesizer.speak(utterance)
@@ -151,10 +153,6 @@ class UserViewModel: ObservableObject {
     func reset() {
         morseInput = ""
         decodedText = ""
-    }
-
-    func toggleAudioFeedback() {
-        audioFeedbackEnabled.toggle()
     }
 
     func handleLetterGap() {

@@ -238,6 +238,10 @@ struct UserView: View {
                     }
                 }
             )
+            .onAppear {
+                viewModel.settings = settings
+                caregiverViewModel.settings = settings
+            }
         }
     }
 }
