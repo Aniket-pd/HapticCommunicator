@@ -9,6 +9,8 @@ class SettingsViewModel: ObservableObject {
     /// Currently selected haptic speed. `playSpeedPreview()` is called
     /// manually from `SettingsView` whenever this value changes.
     @Published var selectedSpeed: HapticSpeed = .standard
+    @Published var beepSoundEnabled: Bool = true
+    @Published var speechSoundEnabled: Bool = true
 
     /// Haptic engine used for previewing speed changes.
     private var hapticEngine: CHHapticEngine?
@@ -79,8 +81,6 @@ class SettingsViewModel: ObservableObject {
             try hapticEngine?.start()
         } catch {
             print("Haptic engine error: \(error.localizedDescription)")
-        }
-    }
         }
     }
 }
