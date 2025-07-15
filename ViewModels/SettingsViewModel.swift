@@ -48,7 +48,7 @@ class SettingsViewModel: ObservableObject {
         do {
             for symbol in morse {
                 if Task.isCancelled {
-                    hapticEngine?.stop(completionHandler: nil)
+                    hapticEngine.stop(completionHandler: nil)
                     return
                 }
                 switch symbol {
