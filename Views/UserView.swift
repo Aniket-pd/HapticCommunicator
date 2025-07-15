@@ -195,21 +195,6 @@ struct UserView: View {
             )
             .padding()
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        viewModel.toggleAudioFeedback()
-                    } label: {
-                        Image(systemName: viewModel.audioFeedbackEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
-                    }
-                    .accessibilityLabel("Toggle audio feedback")
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Clear History") {
-                        messageHistory.removeAll()
-                    }
-                }
-            }
             .overlay(
                 Group {
                     if showHelloWorld {

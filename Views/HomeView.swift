@@ -22,7 +22,7 @@ struct TopTabBar: View {
                     .foregroundColor(selectedTab == .userMode ? .white : .primary)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(selectedTab == .userMode ? Color.blue : Color.gray.opacity(0.2))
+                            .fill(selectedTab == .userMode ? Color(red: 80/255, green: 200/255, blue: 120/255, opacity: 1) : Color.gray.opacity(0.2))
                     )
                     .shadow(radius: selectedTab == .userMode ? 4 : 0)
             }
@@ -38,7 +38,7 @@ struct TopTabBar: View {
                     .foregroundColor(selectedTab == .careTaker ? .white : .primary)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(selectedTab == .careTaker ? Color.blue : Color.gray.opacity(0.2))
+                            .fill(selectedTab == .careTaker ? Color(red: 74/255, green: 144/255, blue: 226/255, opacity: 1) : Color.gray.opacity(0.2))
                     )
                     .shadow(radius: selectedTab == .careTaker ? 4 : 0)
             }
@@ -74,19 +74,23 @@ struct HomeView: View {
 
             Divider()
 
-            // Main content area
-            Group {
-                switch selectedTab {
-                case .userMode:
+            // Main content area with smooth transitions
+            ZStack {
+                if selectedTab == .userMode {
                     UserView()
-                case .careTaker:
+                        .transition(.opacity)
+                }
+                if selectedTab == .careTaker {
                     CaregiverView()
-                case .settings:
+                        .transition(.opacity)
+                }
+                if selectedTab == .settings {
                     SettingsView()
+                        .transition(.opacity)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .animation(.default, value: selectedTab) // Optional: adds smooth switch animation
+            .animation(.easeInOut, value: selectedTab)
         }
     }
 }
