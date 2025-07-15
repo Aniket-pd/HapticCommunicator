@@ -95,8 +95,10 @@ struct CaregiverView: View {
                 .padding()
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    viewModel.startVibration()
-                    viewModel.isReadyForHandover = false
+                    Task {
+                        await viewModel.startVibration()
+                        viewModel.isReadyForHandover = false
+                    }
                 }
                 .presentationDetents([.fraction(0.8)])
             }

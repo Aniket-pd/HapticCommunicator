@@ -16,6 +16,7 @@ class CaregiverViewModel: ObservableObject {
     @Published var morseCode: String = ""
     @Published var isReadyForHandover: Bool = false
     @Published var errorMessage: String?
+    @Published var isVibrating: Bool = false
 
     private var hapticEngine: CHHapticEngine?
 
@@ -34,12 +35,66 @@ class CaregiverViewModel: ObservableObject {
         }
     }
 
-    func startVibration() {
+    func startVibration() async {
         guard !morseCode.isEmpty else {
             errorMessage = "No Morse code to vibrate."
             return
         }
-        vibrateMorseCode(morseCode)
+        guard !isVibrating else {
+            return
+        }
+        isVibrating = true
+
+        var events = [CHHapticEvent]()
+        var time: TimeInterval = 0
+
+        for symbol in morseCode {
+            switch symbol {
+            case "·":
+                let dotEvent = CHHapticEvent(
+                    eventType: .hapticTransient,
+                    parameters: [
+                        CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
+                        CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.4)
+                    ],
+                    relativeTime: time)
+                events.append(dotEvent)
+                time += 0.2
+            case "−":
+                let dashEvent = CHHapticEvent(
+                    eventType: .hapticContinuous,
+                    parameters: [
+                        CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
+                        CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.6)
+                    ],
+                    relativeTime: time,
+                    duration: 0.3)
+                events.append(dashEvent)
+                time += 0.4
+            case " ":
+                time += 0.6
+            default:
+                continue
+            }
+        }
+
+        if events.isEmpty {
+            isVibrating = false
+            return
+        }
+
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try hapticEngine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+
+            let totalDuration = time
+            try? await Task.sleep(nanoseconds: UInt64(totalDuration * 1_000_000_000))
+        } catch {
+            errorMessage = "Failed to play haptic pattern."
+        }
+
+        isVibrating = false
     }
 
     private func prepareHaptics() {

@@ -179,19 +179,21 @@ struct UserView: View {
                                 liveRecognizedText = text
                                 liveMorseText = morse
                             },
-                            onTimeout: {
+                            onTimeout: { [self] in
                                 withAnimation {
                                     showHelloWorld = false
                                 }
-                                viewModel.stopListening()
-                                if !liveRecognizedText.isEmpty {
-                                    messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
-                                    
-                                    caregiverViewModel.morseCode = liveMorseText
-                                    caregiverViewModel.startVibration()
-                                    
-                                    liveRecognizedText = ""
-                                    liveMorseText = ""
+                                Task {
+                                    await viewModel.stopListening()
+                                    if !liveRecognizedText.isEmpty {
+                                        messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
+                                        
+                                        caregiverViewModel.morseCode = liveMorseText
+                                        await caregiverViewModel.startVibration()
+                                        
+                                        liveRecognizedText = ""
+                                        liveMorseText = ""
+                                    }
                                 }
                             }
                         )
@@ -219,15 +221,17 @@ struct UserView: View {
                                 withAnimation {
                                     showHelloWorld = false
                                 }
-                                viewModel.stopListening()
-                                if !liveRecognizedText.isEmpty {
-                                    messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
-                                    
-                                    caregiverViewModel.morseCode = liveMorseText
-                                    caregiverViewModel.startVibration()
-                                    
-                                    liveRecognizedText = ""
-                                    liveMorseText = ""
+                                Task {
+                                    await viewModel.stopListening()
+                                    if !liveRecognizedText.isEmpty {
+                                        messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
+                                        
+                                        caregiverViewModel.morseCode = liveMorseText
+                                        await caregiverViewModel.startVibration()
+                                        
+                                        liveRecognizedText = ""
+                                        liveMorseText = ""
+                                    }
                                 }
                             }
                     }
@@ -242,3 +246,4 @@ struct UserView_Previews: PreviewProvider {
         UserView()
     }
 }
+
