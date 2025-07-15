@@ -3,6 +3,9 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsViewModel
 
+    private let demoText = "This is your current text"
+    private var demoMorse: String { MorseCodeConverter().textToMorse(demoText) }
+
     var body: some View {
         Form {
             Section(header: Text("Haptic Speed")) {
@@ -12,6 +15,17 @@ struct SettingsView: View {
                     }
                 }
                 .pickerStyle(.inline)
+                .onChange(of: settings.selectedSpeed) { _ in
+                    settings.playSpeedPreview()
+                }
+            }
+
+            Section(header: Text("Demo")) {
+                Text("\"\(demoText)\"")
+                    .font(.headline)
+                Text(demoMorse)
+                    .font(.system(.body, design: .monospaced))
+                    .foregroundColor(.gray)
             }
         }
         .navigationTitle("Settings")
