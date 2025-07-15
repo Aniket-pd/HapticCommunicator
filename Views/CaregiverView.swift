@@ -74,13 +74,24 @@ struct CaregiverView: View {
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.center)
 
-                        Text(viewModel.morseCode)
-                            .font(.title3)
-                            .multilineTextAlignment(.center)
+                        HStack(spacing: 4) {
+                            ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
+                                Text(String(char))
+                                    .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
+                                    .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
+                                    .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
+                                    .font(.title3)
+                            }
+                        }
+                        .multilineTextAlignment(.center)
                     }
                     .padding(.horizontal)
 
                     Spacer()
+
+                    Image(systemName: "hand.tap")
+                        .font(.system(size: 40))
+                        .foregroundColor(.gray)
 
                     Text("Tap Anywhere")
                         .font(.headline)

@@ -17,6 +17,7 @@ class CaregiverViewModel: ObservableObject {
     @Published var isReadyForHandover: Bool = false
     @Published var errorMessage: String?
     @Published var isVibrating: Bool = false
+    @Published var currentSymbolIndex: Int? = nil
 
     private var hapticEngine: CHHapticEngine?
 
@@ -45,53 +46,53 @@ class CaregiverViewModel: ObservableObject {
         }
         isVibrating = true
 
-        var events = [CHHapticEvent]()
-        var time: TimeInterval = 0
-
-        for symbol in morseCode {
-            switch symbol {
-            case "·":
-                let dotEvent = CHHapticEvent(
-                    eventType: .hapticTransient,
-                    parameters: [
-                        CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
-                        CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.4)
-                    ],
-                    relativeTime: time)
-                events.append(dotEvent)
-                time += 0.2
-            case "−":
-                let dashEvent = CHHapticEvent(
-                    eventType: .hapticContinuous,
-                    parameters: [
-                        CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
-                        CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.6)
-                    ],
-                    relativeTime: time,
-                    duration: 0.3)
-                events.append(dashEvent)
-                time += 0.4
-            case " ":
-                time += 0.6
-            default:
-                continue
-            }
-        }
-
-        if events.isEmpty {
-            isVibrating = false
-            return
-        }
-
         do {
-            let pattern = try CHHapticPattern(events: events, parameters: [])
-            let player = try hapticEngine?.makePlayer(with: pattern)
-            try player?.start(atTime: 0)
+            for (index, symbol) in morseCode.enumerated() {
+                await MainActor.run {
+                    self.currentSymbolIndex = index
+                }
 
-            let totalDuration = time
-            try? await Task.sleep(nanoseconds: UInt64(totalDuration * 1_000_000_000))
+                switch symbol {
+                case "·":
+                    let event = CHHapticEvent(
+                        eventType: .hapticTransient,
+                        parameters: [
+                            CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
+                            CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.4)
+                        ],
+                        relativeTime: 0)
+                    let pattern = try CHHapticPattern(events: [event], parameters: [])
+                    let player = try hapticEngine?.makePlayer(with: pattern)
+                    try player?.start(atTime: 0)
+                    try? await Task.sleep(nanoseconds: 300_000_000)
+
+                case "−":
+                    let event = CHHapticEvent(
+                        eventType: .hapticContinuous,
+                        parameters: [
+                            CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
+                            CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.6)
+                        ],
+                        relativeTime: 0,
+                        duration: 0.3)
+                    let pattern = try CHHapticPattern(events: [event], parameters: [])
+                    let player = try hapticEngine?.makePlayer(with: pattern)
+                    try player?.start(atTime: 0)
+                    try? await Task.sleep(nanoseconds: 600_000_000)
+
+                case " ":
+                    try? await Task.sleep(nanoseconds: 600_000_000)
+
+                default:
+                    continue
+                }
+            }
         } catch {
             errorMessage = "Failed to play haptic pattern."
+        }
+
+        await MainActor.run {
+            self.currentSymbolIndex = nil
         }
 
         isVibrating = false
