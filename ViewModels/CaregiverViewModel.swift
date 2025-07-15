@@ -40,7 +40,7 @@ class CaregiverViewModel: ObservableObject {
         }
     }
 
-    func startVibration() async {
+    func startVibration(speed: HapticSpeed) async {
         guard !morseCode.isEmpty else {
             errorMessage = "No Morse code to vibrate."
             return
@@ -50,6 +50,7 @@ class CaregiverViewModel: ObservableObject {
         }
         isVibrating = true
 
+        let unit = speed.unitDuration
         do {
             for (index, symbol) in morseCode.enumerated() {
                 await MainActor.run {
@@ -70,7 +71,7 @@ class CaregiverViewModel: ObservableObject {
                     let pattern = try CHHapticPattern(events: [event], parameters: [])
                     let player = try hapticEngine?.makePlayer(with: pattern)
                     try player?.start(atTime: 0)
-                    try? await Task.sleep(nanoseconds: 300_000_000)
+                    try? await Task.sleep(nanoseconds: UInt64(unit * 1_000_000_000))
 
                 case "−":
                     dashPlayer?.currentTime = 0
@@ -82,14 +83,14 @@ class CaregiverViewModel: ObservableObject {
                             CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.6)
                         ],
                         relativeTime: 0,
-                        duration: 0.3)
+                        duration: unit)
                     let pattern = try CHHapticPattern(events: [event], parameters: [])
                     let player = try hapticEngine?.makePlayer(with: pattern)
                     try player?.start(atTime: 0)
-                    try? await Task.sleep(nanoseconds: 600_000_000)
+                    try? await Task.sleep(nanoseconds: UInt64(unit * 2 * 1_000_000_000))
 
                 case " ":
-                    try? await Task.sleep(nanoseconds: 600_000_000)
+                    try? await Task.sleep(nanoseconds: UInt64(unit * 2 * 1_000_000_000))
 
                 default:
                     continue
