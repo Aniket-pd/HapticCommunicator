@@ -13,6 +13,10 @@ struct SettingsView: View {
                 }
                 .pickerStyle(.inline)
             }
+            Section(header: Text("Audio")) {
+                Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
+                Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
+            }
         }
         .navigationTitle("Settings")
     }

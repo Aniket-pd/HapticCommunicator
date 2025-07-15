@@ -56,6 +56,7 @@ struct CaregiverView: View {
             }
             .padding()
             .onAppear {
+                viewModel.settings = settings
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     isTextEditorFocused = true
                 }

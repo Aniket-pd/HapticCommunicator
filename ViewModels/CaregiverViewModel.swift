@@ -23,6 +23,7 @@ class CaregiverViewModel: ObservableObject {
     private var hapticEngine: CHHapticEngine?
     private var dotPlayer: AVAudioPlayer?
     private var dashPlayer: AVAudioPlayer?
+    var settings: SettingsViewModel?
 
     init() {
         prepareHaptics()
@@ -59,8 +60,10 @@ class CaregiverViewModel: ObservableObject {
 
                 switch symbol {
                 case "·":
-                    dotPlayer?.currentTime = 0
-                    dotPlayer?.play()
+                    if settings?.beepSoundEnabled ?? true {
+                        dotPlayer?.currentTime = 0
+                        dotPlayer?.play()
+                    }
                     let event = CHHapticEvent(
                         eventType: .hapticTransient,
                         parameters: [
@@ -74,8 +77,10 @@ class CaregiverViewModel: ObservableObject {
                     try? await Task.sleep(nanoseconds: UInt64(unit * 1_000_000_000))
 
                 case "−":
-                    dashPlayer?.currentTime = 0
-                    dashPlayer?.play()
+                    if settings?.beepSoundEnabled ?? true {
+                        dashPlayer?.currentTime = 0
+                        dashPlayer?.play()
+                    }
                     let event = CHHapticEvent(
                         eventType: .hapticContinuous,
                         parameters: [
