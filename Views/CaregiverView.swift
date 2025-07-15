@@ -67,26 +67,38 @@ struct CaregiverView: View {
                 Text(viewModel.errorMessage ?? "")
             }
             .sheet(isPresented: $viewModel.isReadyForHandover) {
-                VStack(spacing: 20) {
-                    Text("Hand over your phone to the user and press Start to play the vibration.")
-                        .font(.title3)
-                        .multilineTextAlignment(.center)
-                        .padding()
-
-                    Button(action: {
-                        viewModel.startVibration()
-                        viewModel.isReadyForHandover = false
-                    }) {
-                        Text("Start")
+                VStack(spacing: 30) {
+                    VStack(spacing: 16) {
+                        Text(viewModel.inputText)
                             .font(.title2)
-                            .frame(maxWidth: .infinity)
-                            .padding()
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.center)
+
+                        Text(viewModel.morseCode)
+                            .font(.title3)
+                            .multilineTextAlignment(.center)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
                     .padding(.horizontal)
+
+                    Spacer()
+
+                    Text("Tap Anywhere")
+                        .font(.headline)
+                        .foregroundColor(.gray)
+
+                    Text("hand over your phone to the user and press anywhere to play the vibration")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
                 }
-                .presentationDetents([.fraction(0.3)])
+                .padding()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    viewModel.startVibration()
+                    viewModel.isReadyForHandover = false
+                }
+                .presentationDetents([.fraction(0.8)])
             }
         }
     }
