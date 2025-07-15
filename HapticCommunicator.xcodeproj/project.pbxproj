@@ -14,6 +14,9 @@
 		E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */; };
 		E21786DB2E216FDC005DBB8B /* CaregiverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B82E212AD6005DBB8B /* CaregiverView.swift */; };
 		E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */; };
+		E21787422E26F87C005DBB8B /* HapticSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21787412E26F87C005DBB8B /* HapticSpeed.swift */; };
+		E21787442E26F8A2005DBB8B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */; };
+		E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BA2E212B26005DBB8B /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,8 @@
 		E21786B92E212AF5005DBB8B /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		E21786BA2E212B26005DBB8B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeConverter.swift; sourceTree = "<group>"; };
+		E21787412E26F87C005DBB8B /* HapticSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticSpeed.swift; sourceTree = "<group>"; };
+		E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -131,6 +136,7 @@
 		E21786AF2E212977005DBB8B /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */,
 				E21786B62E212A93005DBB8B /* UserViewModel.swift */,
 				E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */,
 			);
@@ -140,6 +146,7 @@
 		E21786B02E212983005DBB8B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E21787412E26F87C005DBB8B /* HapticSpeed.swift */,
 				E21786B42E212A54005DBB8B /* MorseCodeConverter.swift */,
 				E21786B32E212A13005DBB8B /* MessageModel.swift */,
 			);
@@ -300,11 +307,14 @@
 			files = (
 				E21786BC2E2141FA005DBB8B /* HomeView.swift in Sources */,
 				E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */,
+				E21787422E26F87C005DBB8B /* HapticSpeed.swift in Sources */,
 				E21786DB2E216FDC005DBB8B /* CaregiverView.swift in Sources */,
+				E21787442E26F8A2005DBB8B /* SettingsViewModel.swift in Sources */,
 				E21786D92E216FBC005DBB8B /* UserViewModel.swift in Sources */,
 				E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */,
 				E21786D82E216FA4005DBB8B /* UserView.swift in Sources */,
 				E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */,
+				E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

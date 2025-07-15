@@ -99,10 +99,10 @@ struct HomeView: View {
     }
 }
 
-// Preview
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-            .environmentObject(SettingsViewModel())
-    }
-}
+//// Preview
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+//            .environmentObject(SettingsViewModel())
+//    }
+//}
