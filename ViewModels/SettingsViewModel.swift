@@ -15,6 +15,10 @@ class SettingsViewModel: ObservableObject {
     /// Haptic engine used for previewing speed changes.
     private var hapticEngine: CHHapticEngine?
 
+    /// Currently running preview task so it can be cancelled when a new
+    /// preview starts.
+    private var previewTask: Task<Void, Never>? = nil
+
     init() {
         prepareHaptics()
     }
@@ -22,8 +26,16 @@ class SettingsViewModel: ObservableObject {
     /// Plays a short haptic preview of "This is your current speed" using the
     /// selected speed so the user immediately feels the effect.
     func playSpeedPreview() {
+        // Cancel any currently running preview so haptics do not overlap
+        previewTask?.cancel()
+        previewTask = nil
+
+        // Stop any haptic currently playing and restart the engine
+        hapticEngine?.stop(completionHandler: nil)
+        prepareHaptics()
+
         let morse = MorseCodeConverter().textToMorse("This is your current speed")
-        Task { await vibrate(morse: morse, speed: selectedSpeed) }
+        previewTask = Task { await vibrate(morse: morse, speed: selectedSpeed) }
     }
 
     // MARK: - Private helpers
@@ -35,6 +47,10 @@ class SettingsViewModel: ObservableObject {
 
         do {
             for symbol in morse {
+                if Task.isCancelled {
+                    hapticEngine?.stop(completionHandler: nil)
+                    return
+                }
                 switch symbol {
                 case "·":
                     let event = CHHapticEvent(
@@ -71,7 +87,9 @@ class SettingsViewModel: ObservableObject {
                 }
             }
         } catch {
-            print("Haptic preview error: \(error.localizedDescription)")
+            if (error as? CancellationError) == nil {
+                print("Haptic preview error: \(error.localizedDescription)")
+            }
         }
     }
 
