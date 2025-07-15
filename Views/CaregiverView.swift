@@ -41,10 +41,14 @@ struct CaregiverView: View {
                     Text("Convert to Morse Code")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .padding()
+                        .padding(.vertical, 15)
                 }
                 .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .tint(viewModel.inputText.isEmpty
+                      ? Color.gray
+                      : Color(red: 74 / 255, green: 144 / 255, blue: 226 / 255, opacity: 1))
+                .animation(.easeInOut(duration: 0.3), value: viewModel.inputText.isEmpty)
+                .controlSize(.regular)
                 .disabled(viewModel.inputText.isEmpty)
 
                 Spacer()
