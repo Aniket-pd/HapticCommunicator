@@ -1,5 +1,6 @@
 import Foundation
 import CoreHaptics
+import Combine
 
 /// View model backing `SettingsView`. Stores the currently selected
 /// `HapticSpeed` and provides a short haptic preview when the speed
