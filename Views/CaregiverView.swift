@@ -14,16 +14,21 @@ struct CaregiverView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                TextEditor(text: $viewModel.inputText)
-                    .padding()
-                    .frame(height: 150)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .cornerRadius(12)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(UIColor.separator), lineWidth: 1)
-                    )
-                    .accessibilityLabel("Enter your message")
+                ZStack(alignment: .topLeading) {
+                    TextEditor(text: $viewModel.inputText)
+                        .font(.body) // ensure both have same font
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 8)
+
+                    if viewModel.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Text("Type your words here")
+                            .font(.body) // match TextEditor font
+                            .foregroundColor(.gray)
+                            .padding(.horizontal, 8)
+                            .padding(.top, 16) // fine-tuned to match first line height in TextEditor
+                            .allowsHitTesting(false)
+                    }
+                }
 
                 Button(action: {
                     viewModel.convertTextToMorse()
@@ -40,18 +45,6 @@ struct CaregiverView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Caregiver Mode")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        // Show info or help view
-                    } label: {
-                        Image(systemName: "info.circle")
-                            .imageScale(.large)
-                    }
-                    .accessibilityLabel("Info")
-                }
-            }
             .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
                 Button("OK") {
                     viewModel.errorMessage = nil
