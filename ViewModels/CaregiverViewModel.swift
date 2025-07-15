@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import CoreHaptics
 import UIKit
+import AVFoundation
 
 class CaregiverViewModel: ObservableObject {
     @Published var inputText: String = ""
@@ -20,9 +21,12 @@ class CaregiverViewModel: ObservableObject {
     @Published var currentSymbolIndex: Int? = nil
 
     private var hapticEngine: CHHapticEngine?
+    private var dotPlayer: AVAudioPlayer?
+    private var dashPlayer: AVAudioPlayer?
 
     init() {
         prepareHaptics()
+        prepareBeepSounds()
     }
 
     func convertTextToMorse() {
@@ -54,6 +58,8 @@ class CaregiverViewModel: ObservableObject {
 
                 switch symbol {
                 case "·":
+                    dotPlayer?.currentTime = 0
+                    dotPlayer?.play()
                     let event = CHHapticEvent(
                         eventType: .hapticTransient,
                         parameters: [
@@ -67,6 +73,8 @@ class CaregiverViewModel: ObservableObject {
                     try? await Task.sleep(nanoseconds: 300_000_000)
 
                 case "−":
+                    dashPlayer?.currentTime = 0
+                    dashPlayer?.play()
                     let event = CHHapticEvent(
                         eventType: .hapticContinuous,
                         parameters: [
@@ -104,6 +112,20 @@ class CaregiverViewModel: ObservableObject {
             try hapticEngine?.start()
         } catch {
             errorMessage = "Haptics not supported on this device."
+        }
+    }
+
+    private func prepareBeepSounds() {
+        if let dotData = NSDataAsset(name: "dot")?.data,
+           let dashData = NSDataAsset(name: "dash")?.data {
+            do {
+                dotPlayer = try AVAudioPlayer(data: dotData, fileTypeHint: "wav")
+                dashPlayer = try AVAudioPlayer(data: dashData, fileTypeHint: "wav")
+                dotPlayer?.prepareToPlay()
+                dashPlayer?.prepareToPlay()
+            } catch {
+                errorMessage = "Failed to load beep sounds."
+            }
         }
     }
 
