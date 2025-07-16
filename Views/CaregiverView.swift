@@ -60,6 +60,10 @@ struct CaregiverView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     isTextEditorFocused = true
                 }
+                viewModel.startHapticEngine()
+            }
+            .onDisappear {
+                viewModel.stopHapticEngine()
             }
             .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
                 Button("OK") {

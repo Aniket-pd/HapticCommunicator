@@ -241,6 +241,12 @@ struct UserView: View {
             .onAppear {
                 viewModel.settings = settings
                 caregiverViewModel.settings = settings
+                viewModel.startHapticEngine()
+                caregiverViewModel.startHapticEngine()
+            }
+            .onDisappear {
+                viewModel.stopHapticEngine()
+                caregiverViewModel.stopHapticEngine()
             }
         }
     }

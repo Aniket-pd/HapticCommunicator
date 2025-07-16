@@ -122,6 +122,17 @@ class UserViewModel: ObservableObject {
         }
     }
 
+    /// Starts the haptic engine if needed. Call this when the view appears.
+    func startHapticEngine() {
+        prepareHaptics()
+    }
+
+    /// Stops any ongoing haptics and shuts down the engine.
+    func stopHapticEngine() {
+        stopContinuousHaptic()
+        hapticEngine?.stop(completionHandler: nil)
+    }
+
     // private func playHaptic(type: UIImpactFeedbackGenerator.FeedbackStyle) {
     //     let generator = UIImpactFeedbackGenerator(style: type)
     //     generator.prepare()

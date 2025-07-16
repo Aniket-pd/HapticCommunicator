@@ -30,6 +30,18 @@ class CaregiverViewModel: ObservableObject {
         prepareBeepSounds()
     }
 
+    /// Call when the view appears to ensure the haptic engine is running.
+    func startHapticEngine() {
+        prepareHaptics()
+    }
+
+    /// Stops any active vibration and shuts down the haptic engine.
+    func stopHapticEngine() {
+        isVibrating = false
+        hapticEngine?.stop(completionHandler: nil)
+        currentSymbolIndex = nil
+    }
+
     func convertTextToMorse() {
         let converter = MorseCodeConverter()
         let morse = converter.textToMorse(inputText)
