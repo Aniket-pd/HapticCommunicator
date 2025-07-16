@@ -123,11 +123,19 @@ struct UserView: View {
 
                 Spacer()
 
-                Text("Tap anywhere: Tap rhythmically; swipe up to send")
-                    .font(.footnote)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 30)
-                    .foregroundColor(.gray)
+                VStack(spacing: 8) {
+                    Image(systemName: "mic.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.gray)
+                        .opacity(0.4)
+                    Text("Hold anywhere to Listen\ntap anywhere ; swipe up to send ; swipe right for space")
+                        .font(.footnote)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 10)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.gray)
+                        .opacity(0.4)
+                }
                 }
                 .contentShape(Rectangle())
             .gesture(
