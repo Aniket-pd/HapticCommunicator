@@ -159,6 +159,10 @@ class UserViewModel: ObservableObject {
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
               let hapticEngine = hapticEngine else { return }
         do {
+            // The audio session configuration performed when starting speech
+            // recognition can stop the haptic engine. Ensure the engine is
+            // running before creating the breathing player.
+            try hapticEngine.start()
             let inhale = CHHapticEvent(
                 eventType: .hapticContinuous,
                 parameters: [
