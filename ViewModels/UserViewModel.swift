@@ -282,7 +282,8 @@ class UserViewModel: ObservableObject {
 
         silenceTimer?.invalidate()
         lastSpeechResultTime = Date()
-        silenceTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        silenceTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            guard let self = self else { return }
             if let lastTime = self.lastSpeechResultTime {
                 let silenceDuration = Date().timeIntervalSince(lastTime)
                 if silenceDuration >= 3 {
