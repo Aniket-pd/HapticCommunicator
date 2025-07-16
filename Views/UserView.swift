@@ -22,6 +22,9 @@ struct UserView: View {
     @State private var isPressing = false
     @State private var showHelloWorld = false
     @State private var breathing = false
+    /// True when a long-press mic recording session is active. Used to ignore
+    /// tap gestures until the finger is lifted.
+    @State private var micRecording = false
     @State private var messageHistory: [Message] = [
         Message(text: "Decoded text will be displayed here", morse: "Morse code history will appear here", isSpeech: false)
     ]
@@ -141,7 +144,7 @@ struct UserView: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
-                        if !isPressing {
+                        if !isPressing && !micRecording {
                             isPressing = true
 
                             // Remove intro message if present
@@ -154,6 +157,11 @@ struct UserView: View {
                     }
                     .onEnded { value in
                         isPressing = false
+                        if micRecording {
+                            // Ignore gesture completions while recording
+                            micRecording = false
+                            return
+                        }
                         if value.translation.height < -50 {
                             viewModel.handleDoubleTap()
                             if let lastIndex = messageHistory.indices.last {
@@ -185,6 +193,8 @@ struct UserView: View {
                 .simultaneousGesture(
                     LongPressGesture(minimumDuration: 2)
                         .onEnded { _ in
+                            micRecording = true
+                            viewModel.cancelTap()
                             withAnimation {
                                 showHelloWorld = true
                             }
@@ -250,6 +260,7 @@ struct UserView: View {
                             viewModel.stopBreathingHaptics()
                         }
                         .onTapGesture {
+                            micRecording = false
                             withAnimation {
                                 showHelloWorld = false
                             }
