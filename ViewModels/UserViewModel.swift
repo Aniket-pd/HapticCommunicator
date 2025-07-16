@@ -23,6 +23,7 @@ class UserViewModel: ObservableObject {
     private var hapticEngine: CHHapticEngine?
     private var tapStartTime: Date?
     private var continuousPlayer: CHHapticAdvancedPatternPlayer?
+    private var breathingPlayer: CHHapticAdvancedPatternPlayer?
     private var lastTapEndTime: Date?
     private var audioEngine = AVAudioEngine()
     
@@ -98,6 +99,9 @@ class UserViewModel: ObservableObject {
     }
 
     private func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else {
+            return
+        }
         do {
             hapticEngine = try CHHapticEngine()
             try hapticEngine?.start()
@@ -158,6 +162,64 @@ class UserViewModel: ObservableObject {
             try continuousPlayer?.stop(atTime: 0)
         } catch {
             print("Failed to stop continuous haptic: \(error.localizedDescription)")
+        }
+    }
+
+    func startBreathingHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
+              let hapticEngine = hapticEngine else { return }
+        do {
+            let inhale = CHHapticEvent(
+                eventType: .hapticContinuous,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.6),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.6)
+                ],
+                relativeTime: 0,
+                duration: 1.0)
+            let exhale = CHHapticEvent(
+                eventType: .hapticContinuous,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.3),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.3)
+                ],
+                relativeTime: 1.0,
+                duration: 1.0)
+            let pattern = try CHHapticPattern(events: [inhale, exhale], parameters: [])
+            breathingPlayer = try hapticEngine.makeAdvancedPlayer(with: pattern)
+            breathingPlayer?.loopEnabled = true
+            breathingPlayer?.loopEnd = 2.0
+            try breathingPlayer?.start(atTime: 0)
+        } catch {
+            print("Failed to start breathing haptics: \(error.localizedDescription)")
+        }
+    }
+
+    func stopBreathingHaptics() {
+        do {
+            try breathingPlayer?.stop(atTime: 0)
+        } catch {
+            print("Failed to stop breathing haptics: \(error.localizedDescription)")
+        }
+        breathingPlayer = nil
+    }
+
+    func playCloseHaptic() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
+              let hapticEngine = hapticEngine else { return }
+        do {
+            let event = CHHapticEvent(
+                eventType: .hapticTransient,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: 1.0),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 1.0)
+                ],
+                relativeTime: 0)
+            let pattern = try CHHapticPattern(events: [event], parameters: [])
+            let player = try hapticEngine.makePlayer(with: pattern)
+            try player.start(atTime: 0)
+        } catch {
+            print("Failed to play close haptic: \(error.localizedDescription)")
         }
     }
 
