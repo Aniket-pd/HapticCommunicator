@@ -90,7 +90,7 @@ struct CaregiverView: View {
                                                 .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
                                                 .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
                                                 .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
-                                                .font(.title3)
+                                                .font(.title2)
                                                 .id(index)
                                         }
                                     }
