@@ -110,6 +110,12 @@ class UserViewModel: ObservableObject {
         do {
             hapticEngine = try CHHapticEngine()
             try hapticEngine?.start()
+
+            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.5)
+            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.5)
+            let event = CHHapticEvent(eventType: .hapticContinuous, parameters: [intensity, sharpness], relativeTime: 0, duration: 10.0)
+            let pattern = try CHHapticPattern(events: [event], parameters: [])
+            continuousPlayer = try hapticEngine?.makeAdvancedPlayer(with: pattern)
         } catch {
             print("Haptic engine error: \(error.localizedDescription)")
         }
@@ -134,13 +140,7 @@ class UserViewModel: ObservableObject {
     // }
 
     private func startContinuousHaptic() {
-        guard let hapticEngine = hapticEngine else { return }
         do {
-            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.5)
-            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.5)
-            let event = CHHapticEvent(eventType: .hapticContinuous, parameters: [intensity, sharpness], relativeTime: 0, duration: 10.0)
-            let pattern = try CHHapticPattern(events: [event], parameters: [])
-            continuousPlayer = try hapticEngine.makeAdvancedPlayer(with: pattern)
             try continuousPlayer?.start(atTime: 0)
         } catch {
             print("Failed to start continuous haptic: \(error.localizedDescription)")
