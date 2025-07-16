@@ -155,6 +155,13 @@ class UserViewModel: ObservableObject {
         }
     }
 
+    /// Cancels the current tap without registering a dot or dash.
+    /// Stops the continuous haptic and clears the start time.
+    func cancelTap() {
+        tapStartTime = nil
+        stopContinuousHaptic()
+    }
+
     func startBreathingHaptics() {
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
               let hapticEngine = hapticEngine else { return }
