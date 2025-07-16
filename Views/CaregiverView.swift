@@ -82,19 +82,28 @@ struct CaregiverView: View {
                                 .multilineTextAlignment(.center)
                                 .fixedSize(horizontal: false, vertical: true)
 
-                            ScrollView(.horizontal, showsIndicators: true) {
-                                HStack(spacing: 4) {
-                                    ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
-                                        Text(String(char))
-                                            .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
-                                            .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
-                                            .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
-                                            .font(.title3)
+                            ScrollViewReader { proxy in
+                                ScrollView(.horizontal, showsIndicators: true) {
+                                    HStack(spacing: 4) {
+                                        ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
+                                            Text(String(char))
+                                                .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
+                                                .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
+                                                .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
+                                                .font(.title3)
+                                                .id(index)
+                                        }
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .multilineTextAlignment(.center)
+                                .onChange(of: viewModel.currentSymbolIndex) { index in
+                                    guard let index = index else { return }
+                                    withAnimation {
+                                        proxy.scrollTo(index, anchor: .center)
                                     }
                                 }
                             }
-                            .frame(maxWidth: .infinity)
-                            .multilineTextAlignment(.center)
                         }
                         .padding(.horizontal)
 
