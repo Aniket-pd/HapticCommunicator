@@ -181,34 +181,34 @@ struct UserView: View {
                                 showHelloWorld = true
                             }
                             breathing = true
-                            viewModel.startBreathingHaptics()
-                        viewModel.startListening(
-                            onResult: { text in
-                                let converter = MorseCodeConverter()
-                                let morse = converter.textToMorse(text)
-                                liveRecognizedText = text
-                                liveMorseText = morse
-                            },
-                            onTimeout: { [self] in
-                                withAnimation {
-                                    showHelloWorld = false
-                                }
-                                Task {
-                                    await viewModel.stopListening()
-                                    if !liveRecognizedText.isEmpty {
-                                        let newMessage = Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true)
-                                        messageHistory.append(newMessage)
+                            viewModel.startListening(
+                                onResult: { text in
+                                    let converter = MorseCodeConverter()
+                                    let morse = converter.textToMorse(text)
+                                    liveRecognizedText = text
+                                    liveMorseText = morse
+                                },
+                                onTimeout: { [self] in
+                                    withAnimation {
+                                        showHelloWorld = false
+                                    }
+                                    Task {
+                                        await viewModel.stopListening()
+                                        if !liveRecognizedText.isEmpty {
+                                            let newMessage = Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true)
+                                            messageHistory.append(newMessage)
 
-                                        caregiverViewModel.morseCode = liveMorseText
-                                        caregiverViewModel.activeMessageID = newMessage.id
-                                        await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
+                                            caregiverViewModel.morseCode = liveMorseText
+                                            caregiverViewModel.activeMessageID = newMessage.id
+                                            await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
 
-                                        liveRecognizedText = ""
-                                        liveMorseText = ""
+                                            liveRecognizedText = ""
+                                            liveMorseText = ""
+                                        }
                                     }
                                 }
-                            }
-                        )
+                            )
+                            viewModel.startBreathingHaptics()
                         }
                 )
                 .padding()
