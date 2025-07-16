@@ -73,10 +73,15 @@ struct UserView: View {
                                     }
                                     HStack {
                                         if message.isSpeech {
-                                            Text(message.morse)
-                                                .font(.system(size: 14, design: .monospaced))
-                                                .foregroundColor(.gray)
-                                                .multilineTextAlignment(.leading)
+                                            if caregiverViewModel.isVibrating && caregiverViewModel.activeMessageID == message.id {
+                                                AnimatedMorseView(morse: message.morse, currentIndex: caregiverViewModel.currentSymbolIndex)
+                                                    .frame(height: 20)
+                                            } else {
+                                                Text(message.morse)
+                                                    .font(.system(size: 14, design: .monospaced))
+                                                    .foregroundColor(.gray)
+                                                    .multilineTextAlignment(.leading)
+                                            }
                                             Spacer()
                                         } else {
                                             Spacer()
@@ -85,7 +90,7 @@ struct UserView: View {
                                                 .foregroundColor(
                                                     message.morse == "Morse code history will appear here"
                                                     ? .gray
-                                                    : (message.isSpeech ? .gray : Color(red: 80/255, green: 200/255, blue: 120/255, opacity: 1))
+                                                    : Color(red: 80/255, green: 200/255, blue: 120/255, opacity: 1)
                                                 )
                                                 .multilineTextAlignment(.trailing)
                                         }
@@ -191,11 +196,13 @@ struct UserView: View {
                                 Task {
                                     await viewModel.stopListening()
                                     if !liveRecognizedText.isEmpty {
-                                        messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
-                                        
+                                        let newMessage = Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true)
+                                        messageHistory.append(newMessage)
+
                                         caregiverViewModel.morseCode = liveMorseText
+                                        caregiverViewModel.activeMessageID = newMessage.id
                                         await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
-                                        
+
                                         liveRecognizedText = ""
                                         liveMorseText = ""
                                     }
@@ -242,9 +249,11 @@ struct UserView: View {
                             Task {
                                 await viewModel.stopListening()
                                 if !liveRecognizedText.isEmpty {
-                                    messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
+                                    let newMessage = Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true)
+                                    messageHistory.append(newMessage)
 
                                     caregiverViewModel.morseCode = liveMorseText
+                                    caregiverViewModel.activeMessageID = newMessage.id
                                     await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
 
                                     liveRecognizedText = ""
@@ -254,35 +263,6 @@ struct UserView: View {
                         }
                 }
 
-                if caregiverViewModel.isVibrating {
-                    VStack {
-                        Spacer()
-                        ScrollViewReader { proxy in
-                            ScrollView(.horizontal, showsIndicators: true) {
-                                HStack(spacing: 4) {
-                                    ForEach(Array(caregiverViewModel.morseCode.enumerated()), id: \.offset) { index, char in
-                                        Text(String(char))
-                                            .foregroundColor(index == caregiverViewModel.currentSymbolIndex ? .blue : .gray)
-                                            .scaleEffect(index == caregiverViewModel.currentSymbolIndex ? 1.4 : 1.0)
-                                            .animation(.easeInOut(duration: 0.2), value: caregiverViewModel.currentSymbolIndex)
-                                            .font(.title3)
-                                            .id(index)
-                                    }
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .multilineTextAlignment(.center)
-                            .onChange(of: caregiverViewModel.currentSymbolIndex) { index in
-                                guard let index = index else { return }
-                                withAnimation {
-                                    proxy.scrollTo(index, anchor: .center)
-                                }
-                            }
-                        }
-                        .padding(.bottom)
-                    }
-                    .transition(.opacity)
-                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
@@ -303,6 +283,36 @@ struct UserView: View {
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
         UserView()
+    }
+}
+
+/// Displays Morse code characters with a highlight animation for the currently
+/// playing symbol. Used within a speech message block.
+struct AnimatedMorseView: View {
+    let morse: String
+    let currentIndex: Int?
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack(spacing: 4) {
+                    ForEach(Array(morse.enumerated()), id: \.offset) { index, char in
+                        Text(String(char))
+                            .foregroundColor(index == currentIndex ? .blue : .gray)
+                            .scaleEffect(index == currentIndex ? 1.4 : 1.0)
+                            .animation(.easeInOut(duration: 0.2), value: currentIndex)
+                            .font(.system(size: 14, design: .monospaced))
+                            .id(index)
+                    }
+                }
+            }
+            .onChange(of: currentIndex) { index in
+                guard let index = index else { return }
+                withAnimation {
+                    proxy.scrollTo(index, anchor: .center)
+                }
+            }
+        }
     }
 }
 
