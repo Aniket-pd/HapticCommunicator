@@ -23,13 +23,11 @@ class CaregiverViewModel: ObservableObject {
     @Published var activeMessageID: UUID? = nil
 
     private var hapticEngine: CHHapticEngine?
-    private var dotPlayer: AVAudioPlayer?
-    private var dashPlayer: AVAudioPlayer?
+    private let soundManager = SoundManager.shared
     var settings: SettingsViewModel?
 
     init() {
         prepareHaptics()
-        prepareBeepSounds()
     }
 
     /// Call when the view appears to ensure the haptic engine is running.
@@ -75,8 +73,8 @@ class CaregiverViewModel: ObservableObject {
                 switch symbol {
                 case "·":
                     if settings?.beepSoundEnabled ?? true {
-                        dotPlayer?.currentTime = 0
-                        dotPlayer?.play()
+                        soundManager.dotPlayer?.currentTime = 0
+                        soundManager.dotPlayer?.play()
                     }
                     let event = CHHapticEvent(
                         eventType: .hapticTransient,
@@ -92,8 +90,8 @@ class CaregiverViewModel: ObservableObject {
 
                 case "−":
                     if settings?.beepSoundEnabled ?? true {
-                        dashPlayer?.currentTime = 0
-                        dashPlayer?.play()
+                        soundManager.dashPlayer?.currentTime = 0
+                        soundManager.dashPlayer?.play()
                     }
                     let event = CHHapticEvent(
                         eventType: .hapticContinuous,
@@ -135,19 +133,6 @@ class CaregiverViewModel: ObservableObject {
         }
     }
 
-    private func prepareBeepSounds() {
-        if let dotData = NSDataAsset(name: "dot")?.data,
-           let dashData = NSDataAsset(name: "dash")?.data {
-            do {
-                dotPlayer = try AVAudioPlayer(data: dotData, fileTypeHint: "wav")
-                dashPlayer = try AVAudioPlayer(data: dashData, fileTypeHint: "wav")
-                dotPlayer?.prepareToPlay()
-                dashPlayer?.prepareToPlay()
-            } catch {
-                errorMessage = "Failed to load beep sounds."
-            }
-        }
-    }
 
     private func vibrateMorseCode(_ morse: String) {
         var events = [CHHapticEvent]()
