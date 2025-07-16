@@ -253,6 +253,36 @@ struct UserView: View {
                             }
                         }
                 }
+
+                if caregiverViewModel.isVibrating {
+                    VStack {
+                        Spacer()
+                        ScrollViewReader { proxy in
+                            ScrollView(.horizontal, showsIndicators: true) {
+                                HStack(spacing: 4) {
+                                    ForEach(Array(caregiverViewModel.morseCode.enumerated()), id: \.offset) { index, char in
+                                        Text(String(char))
+                                            .foregroundColor(index == caregiverViewModel.currentSymbolIndex ? .blue : .gray)
+                                            .scaleEffect(index == caregiverViewModel.currentSymbolIndex ? 1.4 : 1.0)
+                                            .animation(.easeInOut(duration: 0.2), value: caregiverViewModel.currentSymbolIndex)
+                                            .font(.title3)
+                                            .id(index)
+                                    }
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
+                            .onChange(of: caregiverViewModel.currentSymbolIndex) { index in
+                                guard let index = index else { return }
+                                withAnimation {
+                                    proxy.scrollTo(index, anchor: .center)
+                                }
+                            }
+                        }
+                        .padding(.bottom)
+                    }
+                    .transition(.opacity)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
