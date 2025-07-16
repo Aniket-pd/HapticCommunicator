@@ -73,57 +73,64 @@ struct CaregiverView: View {
                 Text(viewModel.errorMessage ?? "")
             }
             .sheet(isPresented: $viewModel.isReadyForHandover) {
-                ScrollView {
-                    VStack(spacing: 30) {
-                        VStack(spacing: 16) {
-                            Text(viewModel.inputText)
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
+                GeometryReader { geometry in
+                    ScrollView {
+                        VStack(spacing: 30) {
+                            VStack(spacing: 16) {
+                                Text(viewModel.inputText)
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .multilineTextAlignment(.center)
+                                    .fixedSize(horizontal: false, vertical: true)
 
-                            ScrollViewReader { proxy in
-                                ScrollView(.horizontal, showsIndicators: true) {
-                                    HStack(spacing: 4) {
-                                        ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
-                                            Text(String(char))
-                                                .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
-                                                .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
-                                                .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
-                                                .font(.title2)
-                                                .id(index)
+                                ScrollViewReader { proxy in
+                                    ScrollView(.horizontal, showsIndicators: true) {
+                                        HStack(spacing: 4) {
+                                            ForEach(Array(viewModel.morseCode.enumerated()), id: \.offset) { index, char in
+                                                Text(String(char))
+                                                    .foregroundColor(index == viewModel.currentSymbolIndex ? .blue : .gray)
+                                                    .scaleEffect(index == viewModel.currentSymbolIndex ? 1.4 : 1.0)
+                                                    .animation(.easeInOut(duration: 0.2), value: viewModel.currentSymbolIndex)
+                                                    .font(.title2)
+                                                    .id(index)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .multilineTextAlignment(.center)
+                                    .onChange(of: viewModel.currentSymbolIndex) { index in
+                                        guard let index = index else { return }
+                                        withAnimation {
+                                            proxy.scrollTo(index, anchor: .center)
                                         }
                                     }
                                 }
-                                .frame(maxWidth: .infinity)
-                                .multilineTextAlignment(.center)
-                                .onChange(of: viewModel.currentSymbolIndex) { index in
-                                    guard let index = index else { return }
-                                    withAnimation {
-                                        proxy.scrollTo(index, anchor: .center)
-                                    }
-                                }
                             }
+                            .padding(.horizontal)
+
+                            Spacer()
                         }
-                        .padding(.horizontal)
-
-                        Spacer()
-
-                        Image(systemName: "hand.tap")
-                            .font(.system(size: 40))
-                            .foregroundColor(.gray)
-
+                        .padding()
+                    }
+                    // Grouped "Tap Anywhere" and handover text in a VStack at the bottom
+                    VStack(spacing: 16) {
                         Text("Tap Anywhere")
-                            .font(.headline)
-                            .foregroundColor(.gray)
-
+                            .font(.system(size: 31, weight: .semibold))
+                            .foregroundColor(.gray.opacity(0.50))
                         Text("hand over your phone to the user and press anywhere to play the vibration")
                             .font(.footnote)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.gray.opacity(0.50))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
-                    .padding()
+                    .frame(width: geometry.size.width)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height - 70)
+                    // End grouped pin
+
+                    Image(systemName: "hand.tap.fill")
+                        .font(.system(size: 80))
+                        .foregroundColor(.gray.opacity(0.3))
+                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
@@ -132,7 +139,7 @@ struct CaregiverView: View {
                         viewModel.isReadyForHandover = false
                     }
                 }
-                .presentationDetents([.fraction(0.8)])
+                .presentationDetents([.fraction(0.9)])
             }
         }
     }
