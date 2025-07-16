@@ -220,15 +220,15 @@ struct UserView: View {
                             ZStack {
                                 VStack {
                                     Text("I'm Listening")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                    Spacer()
-                                    Text("I'm Listening")
-                                        .font(.title)
+                                        .font(.system(size: 36, weight: .bold))
                                         .foregroundColor(.white)
                                         .rotationEffect(.degrees(180))
-                                        .padding()
+                                        .padding(.top, 100)
+                                    Spacer()
+                                    Text("I'm Listening")
+                                        .font(.system(size: 36, weight: .bold))
+                                        .foregroundColor(.white)
+                                        .padding(.bottom, 100)
                                 }
                                 Circle()
                                     .fill(Color.white.opacity(0.4))
