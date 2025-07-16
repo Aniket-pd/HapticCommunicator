@@ -17,6 +17,7 @@
 		E21787422E26F87C005DBB8B /* HapticSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21787412E26F87C005DBB8B /* HapticSpeed.swift */; };
 		E21787442E26F8A2005DBB8B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */; };
 		E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BA2E212B26005DBB8B /* SettingsView.swift */; };
+		E227DD072E2838270061DA46 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227DD062E2838270061DA46 /* SoundManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeConverter.swift; sourceTree = "<group>"; };
 		E21787412E26F87C005DBB8B /* HapticSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticSpeed.swift; sourceTree = "<group>"; };
 		E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		E227DD062E2838270061DA46 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -156,6 +158,7 @@
 		E21786B12E21298C005DBB8B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E227DD062E2838270061DA46 /* SoundManager.swift */,
 				E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */,
 			);
 			path = Utilities;
@@ -309,6 +312,7 @@
 				E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */,
 				E21787422E26F87C005DBB8B /* HapticSpeed.swift in Sources */,
 				E21786DB2E216FDC005DBB8B /* CaregiverView.swift in Sources */,
+				E227DD072E2838270061DA46 /* SoundManager.swift in Sources */,
 				E21787442E26F8A2005DBB8B /* SettingsViewModel.swift in Sources */,
 				E21786D92E216FBC005DBB8B /* UserViewModel.swift in Sources */,
 				E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */,

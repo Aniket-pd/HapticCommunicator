@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import AVFoundation
 
 /// Loads and provides audio players for dot and dash beep sounds.
