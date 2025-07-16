@@ -73,10 +73,35 @@ struct UserView: View {
                                     }
                                     HStack {
                                         if message.isSpeech {
-                                            Text(message.morse)
-                                                .font(.system(size: 14, design: .monospaced))
-                                                .foregroundColor(.gray)
-                                                .multilineTextAlignment(.leading)
+                                            if caregiverViewModel.isVibrating && caregiverViewModel.morseCode == message.morse {
+                                                ScrollViewReader { proxy in
+                                                    ScrollView(.horizontal, showsIndicators: true) {
+                                                        HStack(spacing: 4) {
+                                                            ForEach(Array(message.morse.enumerated()), id: \.offset) { index, char in
+                                                                Text(String(char))
+                                                                    .foregroundColor(index == caregiverViewModel.currentSymbolIndex ? .blue : .gray)
+                                                                    .scaleEffect(index == caregiverViewModel.currentSymbolIndex ? 1.4 : 1.0)
+                                                                    .animation(.easeInOut(duration: 0.2), value: caregiverViewModel.currentSymbolIndex)
+                                                                    .font(.system(size: 14, design: .monospaced))
+                                                                    .id(index)
+                                                            }
+                                                        }
+                                                    }
+                                                    .frame(maxWidth: .infinity)
+                                                    .multilineTextAlignment(.leading)
+                                                    .onChange(of: caregiverViewModel.currentSymbolIndex) { index in
+                                                        guard let index = index else { return }
+                                                        withAnimation {
+                                                            proxy.scrollTo(index, anchor: .center)
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                Text(message.morse)
+                                                    .font(.system(size: 14, design: .monospaced))
+                                                    .foregroundColor(.gray)
+                                                    .multilineTextAlignment(.leading)
+                                            }
                                             Spacer()
                                         } else {
                                             Spacer()
@@ -85,7 +110,7 @@ struct UserView: View {
                                                 .foregroundColor(
                                                     message.morse == "Morse code history will appear here"
                                                     ? .gray
-                                                    : (message.isSpeech ? .gray : Color(red: 80/255, green: 200/255, blue: 120/255, opacity: 1))
+                                                    : Color(red: 80/255, green: 200/255, blue: 120/255, opacity: 1)
                                                 )
                                                 .multilineTextAlignment(.trailing)
                                         }
@@ -253,6 +278,7 @@ struct UserView: View {
                             }
                         }
                 }
+
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
