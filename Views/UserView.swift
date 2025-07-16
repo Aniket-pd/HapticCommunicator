@@ -21,6 +21,7 @@ struct UserView: View {
     @EnvironmentObject var settings: SettingsViewModel
     @State private var isPressing = false
     @State private var showHelloWorld = false
+    @State private var breathing = false
     @State private var messageHistory: [Message] = [
         Message(text: "Decoded text will be displayed here", morse: "Morse code history will appear here", isSpeech: false)
     ]
@@ -205,31 +206,50 @@ struct UserView: View {
             .overlay(
                 Group {
                     if showHelloWorld {
-                        Color.black.opacity(0.6)
+                        Color.green
                             .ignoresSafeArea()
                             .overlay(
-                                VStack(spacing: 20) {
-                                    Text("Hello World")
-                                        .font(.largeTitle)
-                                        .foregroundColor(.white)
-                                    Text(liveRecognizedText.isEmpty ? "Listening..." : liveRecognizedText)
-                                        .font(.title2)
-                                        .foregroundColor(.white)
-                                        .padding()
+                                ZStack {
+                                    VStack {
+                                        Text("I'm Listening")
+                                            .font(.title)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                        Spacer()
+                                        Text("I'm Listening")
+                                            .font(.title)
+                                            .foregroundColor(.white)
+                                            .rotationEffect(.degrees(180))
+                                            .padding()
+                                    }
+                                    Circle()
+                                        .fill(Color.white.opacity(0.4))
+                                        .frame(width: 180, height: 180)
+                                        .scaleEffect(breathing ? 1.2 : 0.8)
+                                        .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: breathing)
                                 }
                             )
+                            .onAppear {
+                                breathing = true
+                                viewModel.startBreathingHaptics()
+                            }
+                            .onDisappear {
+                                breathing = false
+                                viewModel.stopBreathingHaptics()
+                            }
                             .onTapGesture {
                                 withAnimation {
                                     showHelloWorld = false
                                 }
+                                viewModel.playCloseHaptic()
                                 Task {
                                     await viewModel.stopListening()
                                     if !liveRecognizedText.isEmpty {
                                         messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
-                                        
+
                                         caregiverViewModel.morseCode = liveMorseText
                                         await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
-                                        
+
                                         liveRecognizedText = ""
                                         liveMorseText = ""
                                     }
