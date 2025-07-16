@@ -35,7 +35,14 @@ class UserViewModel: ObservableObject {
 
     private var lastSpeechResultTime: Date?
 
+    private let heavyImpactGenerator: UIImpactFeedbackGenerator
+    private let rigidImpactGenerator: UIImpactFeedbackGenerator
+
     init() {
+        self.heavyImpactGenerator = UIImpactFeedbackGenerator(style: .heavy)
+        self.rigidImpactGenerator = UIImpactFeedbackGenerator(style: .rigid)
+        self.heavyImpactGenerator.prepare()
+        self.rigidImpactGenerator.prepare()
         prepareHaptics()
     }
 
@@ -215,9 +222,8 @@ class UserViewModel: ObservableObject {
         stopContinuousHaptic()  // stop any ongoing continuous haptic
         morseInput.append(" ")  // separator between letters
         morseHistory.append(" ")
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.prepare()
-        generator.impactOccurred()
+        rigidImpactGenerator.prepare()
+        rigidImpactGenerator.impactOccurred()
     }
     
     func startListening(onResult: @escaping (String) -> Void, onTimeout: @escaping () -> Void) {
@@ -314,6 +320,11 @@ class UserViewModel: ObservableObject {
             print("Failed to deactivate AVAudioSession: \(error.localizedDescription)")
         }
     }
+
+    private func playDotHaptic() {
+        heavyImpactGenerator.prepare()
+        heavyImpactGenerator.impactOccurred()
+    }
 }
 
 
@@ -322,10 +333,6 @@ class UserViewModel: ObservableObject {
         generator.notificationOccurred(.success)
     }
 
-    private func playDotHaptic() {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.prepare()
-        generator.impactOccurred()
-    }
+
 
     
