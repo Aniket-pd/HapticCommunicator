@@ -23,6 +23,18 @@ class SettingsViewModel: ObservableObject {
         prepareHaptics()
     }
 
+    /// Call when the settings view becomes visible.
+    func startHapticEngine() {
+        prepareHaptics()
+    }
+
+    /// Cancel any ongoing previews and stop the haptic engine.
+    func stopHapticEngine() {
+        previewTask?.cancel()
+        previewTask = nil
+        hapticEngine?.stop(completionHandler: nil)
+    }
+
     /// Plays a short haptic preview of "This is your current speed" using the
     /// selected speed so the user immediately feels the effect.
     func playSpeedPreview() {

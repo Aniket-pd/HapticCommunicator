@@ -33,6 +33,12 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .onAppear {
+            settings.startHapticEngine()
+        }
+        .onDisappear {
+            settings.stopHapticEngine()
+        }
     }
 }
 
