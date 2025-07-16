@@ -19,6 +19,8 @@ class CaregiverViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isVibrating: Bool = false
     @Published var currentSymbolIndex: Int? = nil
+    // Tracks which message's Morse code is currently being played
+    @Published var activeMessageID: UUID? = nil
 
     private var hapticEngine: CHHapticEngine?
     private var dotPlayer: AVAudioPlayer?
