@@ -27,8 +27,7 @@ class UserViewModel: ObservableObject {
     private var lastTapEndTime: Date?
     private var audioEngine = AVAudioEngine()
     
-    var dotPlayer: AVAudioPlayer?
-    var dashPlayer: AVAudioPlayer?
+    private let soundManager = SoundManager.shared
 
     private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -38,7 +37,6 @@ class UserViewModel: ObservableObject {
 
     init() {
         prepareHaptics()
-        prepareBeepSounds()
     }
 
     func handleTapStart() {
@@ -69,14 +67,14 @@ class UserViewModel: ObservableObject {
 
     func playDotBeep() {
         guard settings?.beepSoundEnabled ?? true else { return }
-        dotPlayer?.currentTime = 0
-        dotPlayer?.play()
+        soundManager.dotPlayer?.currentTime = 0
+        soundManager.dotPlayer?.play()
     }
 
     func playDashBeep() {
         guard settings?.beepSoundEnabled ?? true else { return }
-        dashPlayer?.currentTime = 0
-        dashPlayer?.play()
+        soundManager.dashPlayer?.currentTime = 0
+        soundManager.dashPlayer?.play()
     }
 
     func handleDoubleTap() {
@@ -110,21 +108,6 @@ class UserViewModel: ObservableObject {
         }
     }
     
-    private func prepareBeepSounds() {
-        if let dotData = NSDataAsset(name: "dot")?.data,
-           let dashData = NSDataAsset(name: "dash")?.data {
-            do {
-                dotPlayer = try AVAudioPlayer(data: dotData, fileTypeHint: "wav")
-                dashPlayer = try AVAudioPlayer(data: dashData, fileTypeHint: "wav")
-                dotPlayer?.prepareToPlay()
-                dashPlayer?.prepareToPlay()
-            } catch {
-                print("Audio setup failed: \(error.localizedDescription)")
-            }
-        } else {
-            print("Audio assets 'dot' or 'dash' not found!")
-        }
-    }
 
     /// Starts the haptic engine if needed. Call this when the view appears.
     func startHapticEngine() {
