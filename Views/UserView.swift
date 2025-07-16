@@ -30,7 +30,8 @@ struct UserView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
+            ZStack {
+                VStack(spacing: 20) {
                 // HStack {
                 //     Spacer()
                 //     Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
@@ -122,8 +123,8 @@ struct UserView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 30)
                     .foregroundColor(.gray)
-            }
-            .contentShape(Rectangle())
+                }
+                .contentShape(Rectangle())
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
@@ -168,12 +169,14 @@ struct UserView: View {
                         }
                     }
             )
-            .simultaneousGesture(
-                LongPressGesture(minimumDuration: 2)
-                    .onEnded { _ in
-                        withAnimation {
-                            showHelloWorld = true
-                        }
+                .simultaneousGesture(
+                    LongPressGesture(minimumDuration: 2)
+                        .onEnded { _ in
+                            withAnimation {
+                                showHelloWorld = true
+                            }
+                            breathing = true
+                            viewModel.startBreathingHaptics()
                         viewModel.startListening(
                             onResult: { text in
                                 let converter = MorseCodeConverter()
@@ -199,65 +202,60 @@ struct UserView: View {
                                 }
                             }
                         )
-                    }
-            )
-            .padding()
-            .navigationBarTitleDisplayMode(.inline)
-            .overlay(
-                Group {
-                    if showHelloWorld {
-                        Color.green
-                            .ignoresSafeArea()
-                            .overlay(
-                                ZStack {
-                                    VStack {
-                                        Text("I'm Listening")
-                                            .font(.title)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                        Spacer()
-                                        Text("I'm Listening")
-                                            .font(.title)
-                                            .foregroundColor(.white)
-                                            .rotationEffect(.degrees(180))
-                                            .padding()
-                                    }
-                                    Circle()
-                                        .fill(Color.white.opacity(0.4))
-                                        .frame(width: 180, height: 180)
-                                        .scaleEffect(breathing ? 1.2 : 0.8)
-                                        .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: breathing)
-                                }
-                            )
-                            .onAppear {
-                                breathing = true
-                                viewModel.startBreathingHaptics()
-                            }
-                            .onDisappear {
-                                breathing = false
-                                viewModel.stopBreathingHaptics()
-                            }
-                            .onTapGesture {
-                                withAnimation {
-                                    showHelloWorld = false
-                                }
-                                viewModel.playCloseHaptic()
-                                Task {
-                                    await viewModel.stopListening()
-                                    if !liveRecognizedText.isEmpty {
-                                        messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
+                        }
+                )
+                .padding()
 
-                                        caregiverViewModel.morseCode = liveMorseText
-                                        await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
+                if showHelloWorld {
+                    Color.green
+                        .ignoresSafeArea()
+                        .overlay(
+                            ZStack {
+                                VStack {
+                                    Text("I'm Listening")
+                                        .font(.title)
+                                        .foregroundColor(.white)
+                                        .padding()
+                                    Spacer()
+                                    Text("I'm Listening")
+                                        .font(.title)
+                                        .foregroundColor(.white)
+                                        .rotationEffect(.degrees(180))
+                                        .padding()
+                                }
+                                Circle()
+                                    .fill(Color.white.opacity(0.4))
+                                    .frame(width: 180, height: 180)
+                                    .scaleEffect(breathing ? 1.2 : 0.8)
+                                    .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: breathing)
+                            }
+                        )
+                        .onDisappear {
+                            breathing = false
+                            viewModel.stopBreathingHaptics()
+                        }
+                        .onTapGesture {
+                            withAnimation {
+                                showHelloWorld = false
+                            }
+                            viewModel.playCloseHaptic()
+                            Task {
+                                await viewModel.stopListening()
+                                if !liveRecognizedText.isEmpty {
+                                    messageHistory.append(Message(text: liveRecognizedText, morse: liveMorseText, isSpeech: true))
 
-                                        liveRecognizedText = ""
-                                        liveMorseText = ""
-                                    }
+                                    caregiverViewModel.morseCode = liveMorseText
+                                    await caregiverViewModel.startVibration(speed: settings.selectedSpeed)
+
+                                    liveRecognizedText = ""
+                                    liveMorseText = ""
                                 }
                             }
-                    }
+                        }
                 }
-            )
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 viewModel.settings = settings
                 caregiverViewModel.settings = settings
