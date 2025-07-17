@@ -72,3 +72,7 @@ struct OnboardingView: View {
     }
 }
 
+
+#Preview {
+    OnboardingView(isPresented: .constant(true))
+}
