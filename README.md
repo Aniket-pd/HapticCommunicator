@@ -10,7 +10,7 @@ HapticCommunicator is an iOS app for communicating using Morse code through hapt
 
 Switch between these views using the top tab bar in `HomeView`.
 
-When the app launches for the first time an onboarding walk-through explains these modes and how to interact with each screen.
+When the app launches for the first time an onboarding walk-through explains these modes and how to interact with each screen. Each step now includes a miniature interactive demo so you can try tapping, entering text or adjusting the haptic speed before moving on.
 
 ## Usage Basics
 
