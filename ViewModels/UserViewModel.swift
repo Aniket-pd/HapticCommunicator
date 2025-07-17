@@ -255,6 +255,17 @@ class UserViewModel: ObservableObject {
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { return }
 
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker])
+            try session.setPreferredSampleRate(44100)
+            try session.setActive(true)
+            try session.overrideOutputAudioPort(.speaker)
+            print("Audio session configured for speech recognition")
+        } catch {
+            print("Failed to configure audio session: \(error.localizedDescription)")
+        }
+
         let inputNode = audioEngine.inputNode
         recognitionRequest.shouldReportPartialResults = true
 
@@ -278,17 +289,6 @@ class UserViewModel: ObservableObject {
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, when in
             self.recognitionRequest?.append(buffer)
-        }
-
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker])
-            try session.setPreferredSampleRate(44100)
-            try session.setActive(true)
-            try session.overrideOutputAudioPort(.speaker)
-            print("Audio session configured for speech recognition")
-        } catch {
-            print("Failed to configure audio session: \(error.localizedDescription)")
         }
 
         audioEngine.prepare()
