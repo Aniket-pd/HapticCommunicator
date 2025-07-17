@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsViewModel
+    @Environment(\.scenePhase) private var scenePhase
 
     private let demoText = "This is your current text"
     private var demoMorse: String { MorseCodeConverter().textToMorse(demoText) }
@@ -38,6 +39,14 @@ struct SettingsView: View {
         }
         .onDisappear {
             settings.stopHapticEngine()
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                settings.startHapticEngine()
+                SoundManager.shared.reactivate()
+            } else if phase == .background {
+                settings.stopHapticEngine()
+            }
         }
     }
 }

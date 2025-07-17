@@ -19,6 +19,7 @@ struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @StateObject private var caregiverViewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isPressing = false
     @State private var showHelloWorld = false
     @State private var breathing = false
@@ -294,6 +295,16 @@ struct UserView: View {
             .onDisappear {
                 viewModel.stopHapticEngine()
                 caregiverViewModel.stopHapticEngine()
+            }
+            .onChange(of: scenePhase) { phase in
+                if phase == .active {
+                    viewModel.startHapticEngine()
+                    caregiverViewModel.startHapticEngine()
+                    SoundManager.shared.reactivate()
+                } else if phase == .background {
+                    viewModel.stopHapticEngine()
+                    caregiverViewModel.stopHapticEngine()
+                }
             }
         }
     }
