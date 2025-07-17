@@ -8,6 +8,7 @@ enum TopTab {
 // Reusable TopTabBar component
 struct TopTabBar: View {
     @Binding var selectedTab: TopTab
+    @EnvironmentObject var onboarding: OnboardingManager
 
     var body: some View {
         HStack(spacing: 16) {
@@ -26,6 +27,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .userMode ? 4 : 0)
             }
+            .onboardingTarget(id: "userTab")
 
             Button(action: {
                 selectedTab = .careTaker
@@ -42,6 +44,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .careTaker ? 4 : 0)
             }
+            .onboardingTarget(id: "careTab")
 
             Button(action: {
                 selectedTab = .settings
@@ -56,6 +59,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .settings ? 4 : 0)
             }
+            .onboardingTarget(id: "settingsTab")
         }
         .padding(.horizontal)
         .padding(.vertical, 10)
@@ -67,11 +71,31 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @StateObject private var onboarding = OnboardingManager(steps: [
+        OnboardingStep(
+            id: "userTab",
+            message: "Tap \"User Modes\" to type Morse yourself or dictate speech."
+        ),
+        OnboardingStep(
+            id: "careTab",
+            message: "Select \"CareTaker\" to type text and play it back as vibration."
+        ),
+        OnboardingStep(
+            id: "settingsTab",
+            message: "Open \"Settings\" anytime to adjust vibration and sound options."
+        )
+    ])
 
     var body: some View {
         VStack(spacing: 0) {
             // Top tab bar
             TopTabBar(selectedTab: $selectedTab)
+                .environmentObject(onboarding)
+                .onPreferenceChange(ViewFramePreferenceKey.self) { frames in
+                    for (id, rect) in frames {
+                        onboarding.updateFrame(id: id, frame: rect)
+                    }
+                }
 
             Divider()
 
@@ -96,6 +120,15 @@ struct HomeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
         }
+        .overlay(
+            Group {
+                if let step = onboarding.currentStep {
+                    OnboardingOverlay(targetRect: onboarding.currentRect, message: step.message) {
+                        onboarding.advance()
+                    }
+                }
+            }
+        )
     }
 }
 
