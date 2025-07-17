@@ -10,6 +10,47 @@ HapticCommunicator is an iOS app for communicating using Morse code through hapt
 
 Switch between these views using the top tab bar in `HomeView`.
 
+## View Guide
+
+Below is a quick reference to the main screens and how they work together:
+
+### User View
+
+The User view is a full-screen surface for entering Morse code. Tap quickly to
+send a dot, hold to send a dash and swipe right to insert a letter space. Swipe
+up to decode what you have typed so far. Long pressing anywhere triggers speech
+dictation. While dictating, the spoken words are converted to Morse code and
+vibrated for the caregiver.
+
+### Caregiver View
+
+The Caregiver view lets a helper type normal text and convert it to Morse code
+vibrations for the user. Once converted, a sheet prompts the caregiver to hand
+over the device and tap anywhere to play back the vibration sequence.
+
+### Settings View
+
+The Settings screen allows selecting the vibration speed and toggling beep or
+speech sounds. A short demo text shows how the current speed feels.
+
+Each view runs its own haptic engine but they share `SettingsViewModel` through
+environment objects so changes apply immediately across the app.
+
+## Onboarding
+
+First-time users are guided through the main screens and gestures with a TipKit-powered tutorial. Each step highlights the relevant area of the screen and explains how to:
+
+1. Switch to **User** mode.
+2. Switch to **Caregiver** mode.
+3. Open **Settings**.
+4. Tap once for a dot.
+5. Hold to send a dash.
+6. Swipe right to add a space.
+7. Swipe up to decode the message.
+8. Hold anywhere to start dictating with the microphone.
+
+Tips only appear on the first launch but can be reset from `OnboardingManager` for testing.
+
 ## Usage Basics
 
 1. Open the app and allow speech recognition when prompted.

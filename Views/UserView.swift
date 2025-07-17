@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import TipKit
 
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
@@ -25,10 +26,23 @@ struct UserView: View {
     @State private var liveRecognizedText: String = ""
     @State private var liveMorseText: String = ""
 
+    // MARK: - Onboarding
+    @EnvironmentObject var onboarding: OnboardingManager
+    @State private var dotAnchor = Tip.Anchor()
+    @State private var dashAnchor = Tip.Anchor()
+    @State private var spaceAnchor = Tip.Anchor()
+    @State private var sendAnchor = Tip.Anchor()
+    @State private var micAnchor = Tip.Anchor()
+
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: 20) {
+                VStack(spacing: 20)
+                    .tipAnchor(dotAnchor)
+                    .tipAnchor(dashAnchor)
+                    .tipAnchor(spaceAnchor)
+                    .tipAnchor(sendAnchor)
+                    .tipAnchor(micAnchor) {
                 // HStack {
                 //     Spacer()
                 //     Text(viewModel.decodedText.isEmpty ? "Decoded text will be displayed here" : viewModel.decodedText)
@@ -276,6 +290,38 @@ struct UserView: View {
                         }
                 }
 
+            }
+            .overlay {
+                // Display onboarding tips using TipKit
+                if !onboarding.isCompleted {
+                    switch onboarding.currentStep {
+                    case .dot:
+                        TipView(TapDotTip()) {
+                            Button("Next") { onboarding.advance() }
+                        }
+                        .presentationStyle(.spotlight(dotAnchor))
+                    case .dash:
+                        TipView(TapDashTip()) {
+                            Button("Next") { onboarding.advance() }
+                        }
+                        .presentationStyle(.spotlight(dashAnchor))
+                    case .space:
+                        TipView(SwipeSpaceTip()) {
+                            Button("Next") { onboarding.advance() }
+                        }
+                        .presentationStyle(.spotlight(spaceAnchor))
+                    case .send:
+                        TipView(SendTip()) {
+                            Button("Next") { onboarding.advance() }
+                        }
+                        .presentationStyle(.spotlight(sendAnchor))
+                    case .mic:
+                        TipView(MicTip()) {
+                            Button("Got it") { onboarding.advance() }
+                        }
+                        .presentationStyle(.spotlight(micAnchor))
+                    }
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)

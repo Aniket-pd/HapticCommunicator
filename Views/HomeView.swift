@@ -1,4 +1,5 @@
 import SwiftUI
+import TipKit
 
 // Enum to track selected tab
 enum TopTab {
@@ -8,6 +9,9 @@ enum TopTab {
 // Reusable TopTabBar component
 struct TopTabBar: View {
     @Binding var selectedTab: TopTab
+    var userAnchor: Tip.Anchor
+    var caregiverAnchor: Tip.Anchor
+    var settingsAnchor: Tip.Anchor
 
     var body: some View {
         HStack(spacing: 16) {
@@ -26,6 +30,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .userMode ? 4 : 0)
             }
+            .tipAnchor(userAnchor)
 
             Button(action: {
                 selectedTab = .careTaker
@@ -42,6 +47,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .careTaker ? 4 : 0)
             }
+            .tipAnchor(caregiverAnchor)
 
             Button(action: {
                 selectedTab = .settings
@@ -56,6 +62,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .settings ? 4 : 0)
             }
+            .tipAnchor(settingsAnchor)
         }
         .padding(.horizontal)
         .padding(.vertical, 10)
@@ -67,11 +74,19 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @EnvironmentObject var onboarding: OnboardingManager
+
+    @State private var userAnchor = Tip.Anchor()
+    @State private var caregiverAnchor = Tip.Anchor()
+    @State private var settingsAnchor = Tip.Anchor()
 
     var body: some View {
         VStack(spacing: 0) {
             // Top tab bar
-            TopTabBar(selectedTab: $selectedTab)
+            TopTabBar(selectedTab: $selectedTab,
+                      userAnchor: userAnchor,
+                      caregiverAnchor: caregiverAnchor,
+                      settingsAnchor: settingsAnchor)
 
             Divider()
 
@@ -80,6 +95,7 @@ struct HomeView: View {
                 if selectedTab == .userMode {
                     UserView()
                         .environmentObject(settings)
+                        .environmentObject(onboarding)
                         .transition(.opacity)
                 }
                 if selectedTab == .careTaker {
@@ -95,6 +111,29 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .overlay {
+            if !onboarding.isCompleted {
+                switch onboarding.currentStep {
+                case .homeUser:
+                    TipView(HomeUserTip()) {
+                        Button("Next") { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight(userAnchor))
+                case .homeCaregiver:
+                    TipView(HomeCaregiverTip()) {
+                        Button("Next") { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight(caregiverAnchor))
+                case .homeSettings:
+                    TipView(HomeSettingsTip()) {
+                        Button("Next") { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight(settingsAnchor))
+                default:
+                    EmptyView()
+                }
+            }
         }
     }
 }
