@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import TipKit
 
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
@@ -19,6 +20,8 @@ struct UserView: View {
     /// True when a long-press mic recording session is active. Used to ignore
     /// tap gestures until the finger is lifted.
     @State private var micRecording = false
+    /// Tutorial state for first-time onboarding
+    @StateObject private var onboarding = OnboardingState()
     @State private var messageHistory: [Message] = [
         Message(text: "Decoded text will be displayed here", morse: "Morse code history will appear here", isSpeech: false)
     ]
@@ -133,6 +136,7 @@ struct UserView: View {
                         .foregroundColor(.gray)
                         .opacity(0.4)
                 }
+                .tipAnchor(OnboardingAnchors.micIcon)
                 }
                 .contentShape(Rectangle())
             .gesture(
@@ -277,6 +281,7 @@ struct UserView: View {
                 }
 
             }
+            .tipAnchor(OnboardingAnchors.tapArea)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -297,6 +302,11 @@ struct UserView: View {
                 } else if phase == .background {
                     viewModel.stopHapticEngine()
                     caregiverViewModel.stopHapticEngine()
+                }
+            }
+            .overlay {
+                if !onboarding.hasSeenTutorial {
+                    OnboardingOverlay(state: onboarding)
                 }
             }
         }

@@ -19,6 +19,7 @@
                E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BA2E212B26005DBB8B /* SettingsView.swift */; };
                E227DD072E2838270061DA46 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227DD062E2838270061DA46 /* SoundManager.swift */; };
                9E94503360D849218AA397C8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCE636AC5504CC4BBE15096 /* Message.swift */; };
+               162FC9AF11BE48A882001EFF /* OnboardingTutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4CC6CF65094AAEA160699F /* OnboardingTutorial.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +54,8 @@
 		E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeConverter.swift; sourceTree = "<group>"; };
 		E21787412E26F87C005DBB8B /* HapticSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticSpeed.swift; sourceTree = "<group>"; };
 		E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-		E227DD062E2838270061DA46 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+                E227DD062E2838270061DA46 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+                0E4CC6CF65094AAEA160699F /* OnboardingTutorial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTutorial.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -129,9 +131,10 @@
 			children = (
 				E21786BA2E212B26005DBB8B /* SettingsView.swift */,
 				E21786B92E212AF5005DBB8B /* UserView.swift */,
-				E21786B82E212AD6005DBB8B /* CaregiverView.swift */,
-				E21786B72E212AC3005DBB8B /* HomeView.swift */,
-			);
+                               E21786B82E212AD6005DBB8B /* CaregiverView.swift */,
+                               E21786B72E212AC3005DBB8B /* HomeView.swift */,
+                               0E4CC6CF65094AAEA160699F /* OnboardingTutorial.swift */,
+                       );
 			path = Views;
 			sourceTree = "<group>";
 		};
@@ -319,6 +322,7 @@
                                E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */,
                                E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */,
                                9E94503360D849218AA397C8 /* Message.swift in Sources */,
+                               162FC9AF11BE48A882001EFF /* OnboardingTutorial.swift in Sources */,
                        );
 			runOnlyForDeploymentPostprocessing = 0;
 		};
