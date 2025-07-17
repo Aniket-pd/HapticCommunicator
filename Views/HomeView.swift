@@ -1,4 +1,5 @@
 import SwiftUI
+import TipKit
 
 // Enum to track selected tab
 enum TopTab {
@@ -67,6 +68,7 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @StateObject private var onboarding = OnboardingManager()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -96,6 +98,14 @@ struct HomeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
         }
+        .overlay(
+            Group {
+                if selectedTab == .userMode {
+                    OnboardingOverlay()
+                        .environmentObject(onboarding)
+                }
+            }
+        )
     }
 }
 
