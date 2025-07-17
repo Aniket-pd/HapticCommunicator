@@ -12,6 +12,7 @@ import Combine
 struct CaregiverView: View {
     @StateObject private var viewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isTextEditorFocused: Bool
 
     var body: some View {
@@ -64,6 +65,14 @@ struct CaregiverView: View {
             }
             .onDisappear {
                 viewModel.stopHapticEngine()
+            }
+            .onChange(of: scenePhase) { phase in
+                if phase == .active {
+                    viewModel.startHapticEngine()
+                    SoundManager.shared.reactivate()
+                } else if phase == .background {
+                    viewModel.stopHapticEngine()
+                }
             }
             .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
                 Button("OK") {

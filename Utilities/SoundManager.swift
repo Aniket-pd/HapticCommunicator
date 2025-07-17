@@ -36,4 +36,11 @@ final class SoundManager {
         self.dotPlayer = dot
         self.dashPlayer = dash
     }
+
+    /// Prepares the audio players again after an interruption or when
+    /// returning from the background to ensure sounds play reliably.
+    func reactivate() {
+        dotPlayer?.prepareToPlay()
+        dashPlayer?.prepareToPlay()
+    }
 }
