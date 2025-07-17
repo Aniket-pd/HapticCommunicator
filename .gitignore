@@ -1,0 +1,14 @@
+# macOS/Xcode derived data
+*.xcuserstate
+*.xcworkspace/
+DerivedData/
+
+# Build products
+build/
+Build/
+*.app
+*.ipa
+*.dSYM
+
+# Python
+.pytest_cache/
