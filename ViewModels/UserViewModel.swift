@@ -282,10 +282,11 @@ class UserViewModel: ObservableObject {
 
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+            try session.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker])
+            try session.setPreferredSampleRate(44100)
             try session.setActive(true)
             try session.overrideOutputAudioPort(.speaker)
-            print("Audio session set to playAndRecord with defaultToSpeaker and speaker override")
+            print("Audio session configured for speech recognition")
         } catch {
             print("Failed to configure audio session: \(error.localizedDescription)")
         }
