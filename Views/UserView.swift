@@ -230,6 +230,14 @@ struct UserView: View {
                             viewModel.startBreathingHaptics()
                         }
                 )
+                // Cancel any ongoing haptic when a two finger tap occurs.
+                .overlay(
+                    TwoFingerTapView {
+                        isPressing = false
+                        viewModel.cancelTap()
+                    }
+                    .allowsHitTesting(true)
+                )
                 .padding()
 
                 if showHelloWorld {

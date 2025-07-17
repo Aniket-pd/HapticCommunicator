@@ -16,6 +16,16 @@ final class SoundManager {
     let dashPlayer: AVAudioPlayer?
 
     private init() {
+        // Configure an audio session so beep sounds work even before
+        // any microphone activity occurs.
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playback)
+            try session.setActive(true)
+        } catch {
+            print("Audio session setup failed: \(error.localizedDescription)")
+        }
+
         var dot: AVAudioPlayer? = nil
         var dash: AVAudioPlayer? = nil
 
