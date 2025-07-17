@@ -67,6 +67,7 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
 
     var body: some View {
         VStack(spacing: 0) {
@@ -95,6 +96,9 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .sheet(isPresented: $showOnboarding) {
+            OnboardingView(isPresented: $showOnboarding)
         }
     }
 }
