@@ -8,13 +8,6 @@
 
 import SwiftUI
 
-struct Message: Identifiable {
-    let id = UUID()
-    let text: String
-    let morse: String
-    let isSpeech: Bool // true = speech, false = decoded
-}
-
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @StateObject private var caregiverViewModel = CaregiverViewModel()
