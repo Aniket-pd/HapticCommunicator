@@ -20,6 +20,7 @@
 		E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BA2E212B26005DBB8B /* SettingsView.swift */; };
 		E227DD072E2838270061DA46 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227DD062E2838270061DA46 /* SoundManager.swift */; };
 		E27BE1FD2E29879A00F6ED24 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27BE1FC2E29879A00F6ED24 /* OnboardingView.swift */; };
+                75AE0FA4E8E84A8592141B16 /* TutorialOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AE0FA3E8E84A8592141B15 /* TutorialOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		E227DD062E2838270061DA46 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		E27BE1FC2E29879A00F6ED24 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+                75AE0FA3E8E84A8592141B15 /* TutorialOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -162,6 +164,7 @@
 			children = (
 				E227DD062E2838270061DA46 /* SoundManager.swift */,
 				E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */,
+                                75AE0FA3E8E84A8592141B15 /* TutorialOverlay.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */,
 				9E94503360D849218AA397C8 /* Message.swift in Sources */,
 				E27BE1FD2E29879A00F6ED24 /* OnboardingView.swift in Sources */,
+                                75AE0FA4E8E84A8592141B16 /* TutorialOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

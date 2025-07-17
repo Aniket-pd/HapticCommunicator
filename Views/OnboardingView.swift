@@ -3,7 +3,7 @@ import SwiftUI
 struct OnboardingPage: Identifiable {
     let id = UUID()
     let title: String
-    let text: String
+    let steps: [String]
     let systemImage: String
 }
 
@@ -14,20 +14,51 @@ struct OnboardingView: View {
     private let pages: [OnboardingPage] = [
         OnboardingPage(
             title: "Switch Modes",
-            text: "Use the top tabs to move between User Modes, Caregiver and Settings.",
+            steps: [
+                "Launch the app. You'll see tabs labeled User, Caregiver and Settings at the top.",
+                "Tap a tab name to move between these modes at any time.",
+                "Follow the rest of this tutorial to see what each mode can do."
+            ],
             systemImage: "rectangle.3.offgrid"),
         OnboardingPage(
             title: "User Mode",
-            text: "Tap for dots and dashes, swipe up to decode and long press to speak.",
+            steps: [
+                "With the User tab selected you will see a large tap area.",
+                "Tap briefly for a dot and tap and hold a little longer for a dash.",
+                "Swipe right to insert a gap between letters.",
+                "Swipe up to convert the current Morse sequence to text.",
+                "Try typing \"SOS\" then swipe up to decode it.",
+                "Long press anywhere to play the vibration for your caregiver."
+            ],
             systemImage: "hand.tap"),
         OnboardingPage(
             title: "Caregiver Mode",
-            text: "Type words then tap Convert to Morse Code. Hand the device to the user and tap anywhere to play it.",
+            steps: [
+                "Switch to the Caregiver tab.",
+                "Type a short phrase such as HELLO in the text field.",
+                "Tap Convert to Morse Code.",
+                "Hand the device to the user when prompted.",
+                "They can tap anywhere to feel the vibration pattern." 
+            ],
             systemImage: "person.crop.circle.badge.checkmark"),
         OnboardingPage(
             title: "Settings",
-            text: "Change the haptic speed, preview it and toggle beep or speech sounds.",
+            steps: [
+                "Open the Settings tab.",
+                "Adjust the haptic speed slider and tap Preview to feel the updated tempo.",
+                "Use the toggles to enable or disable beep and speech sounds.",
+                "Return to User or Caregiver mode from the tabs when ready."
+            ],
             systemImage: "gearshape"),
+        OnboardingPage(
+            title: "Gestures",
+            steps: [
+                "Tap – input a dot or confirm a button.",
+                "Long press – speak input in User mode.",
+                "Swipe right – insert a letter gap while entering Morse.",
+                "Swipe up – decode the Morse sequence to text."
+            ],
+            systemImage: "hand.draw"),
     ]
 
     var body: some View {
@@ -41,9 +72,18 @@ struct OnboardingView: View {
                         Text(page.title)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text(page.text)
-                            .multilineTextAlignment(.center)
-                            .padding()
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(Array(page.steps.enumerated()), id: \.offset) { stepIndex, step in
+                                HStack(alignment: .top, spacing: 4) {
+                                    Text("\(stepIndex + 1).")
+                                        .bold()
+                                    Text(step)
+                                        .multilineTextAlignment(.leading)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .padding()
                     }
                     .tag(index)
                     .padding()

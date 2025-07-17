@@ -11,6 +11,7 @@ HapticCommunicator is an iOS app for communicating using Morse code through hapt
 Switch between these views using the top tab bar in `HomeView`.
 
 When the app launches for the first time an onboarding walk-through explains these modes and how to interact with each screen.
+For a hands-on demonstration of each page, see [Docs/OnboardingTutorial.md](Docs/OnboardingTutorial.md).
 
 ## Usage Basics
 
@@ -41,3 +42,12 @@ Run the tests in Xcode with `⌘U` or use `xcodebuild`:
 ```bash
 xcodebuild test -scheme HapticCommunicator -destination 'platform=iOS Simulator,name=iPhone 15'
 ```
+
+## In-app Walkthrough Example
+
+`Tutorial/TutorialOverlay.swift` provides a simple UIKit overlay that highlights
+UI elements and advances through steps. Call `TutorialManager.shared.showTutorialIfNeeded`
+with an array of `TutorialStep`s to present it once for new users.
+
+The file also shows how you could implement the same flow using the popular
+[Instructions](https://github.com/ephread/Instructions) library.
