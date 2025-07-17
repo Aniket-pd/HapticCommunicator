@@ -300,6 +300,7 @@ struct UserView: View {
                 }
             }
         }
+        .captureHighlight(id: "tapArea")
     }
 }
 

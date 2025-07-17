@@ -26,6 +26,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .userMode ? 4 : 0)
             }
+            .captureHighlight(id: "user")
 
             Button(action: {
                 selectedTab = .careTaker
@@ -42,6 +43,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .careTaker ? 4 : 0)
             }
+            .captureHighlight(id: "care")
 
             Button(action: {
                 selectedTab = .settings
@@ -56,6 +58,7 @@ struct TopTabBar: View {
                     )
                     .shadow(radius: selectedTab == .settings ? 4 : 0)
             }
+            .captureHighlight(id: "settings")
         }
         .padding(.horizontal)
         .padding(.vertical, 10)
@@ -67,6 +70,45 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @StateObject private var onboarding = OnboardingManager(steps: [
+        OnboardingStep(
+            id: "user",
+            message: "Tap \"User Modes\" to explore your personal vibration patterns."
+        ),
+        OnboardingStep(
+            id: "care",
+            message: "Select \"CareTaker\" when you want to send or receive vibrations from a partner."
+        ),
+        OnboardingStep(
+            id: "settings",
+            message: "Open the gear icon to configure themes, sounds and other options."
+        ),
+        OnboardingStep(
+            id: "tapArea",
+            message: "Tap quickly for a dot.",
+            visual: AnyView(TapAnimationView())
+        ),
+        OnboardingStep(
+            id: "tapArea",
+            message: "Hold slightly longer for a dash.",
+            visual: AnyView(HoldAnimationView())
+        ),
+        OnboardingStep(
+            id: "tapArea",
+            message: "Swipe right to insert a space between letters.",
+            visual: AnyView(SwipeRightAnimationView())
+        ),
+        OnboardingStep(
+            id: "tapArea",
+            message: "Swipe up to send the decoded message.",
+            visual: AnyView(SwipeUpAnimationView())
+        ),
+        OnboardingStep(
+            id: "tapArea",
+            message: "Hold anywhere to enable the microphone for speech input.",
+            visual: AnyView(HoldAnimationView())
+        )
+    ])
 
     var body: some View {
         VStack(spacing: 0) {
@@ -95,6 +137,12 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .overlay(OnboardingOverlay(manager: onboarding))
+        .onAppear {
+            if UserDefaults.standard.bool(forKey: "didShowTutorial") {
+                onboarding.index = onboarding.steps.count
+            }
         }
     }
 }
