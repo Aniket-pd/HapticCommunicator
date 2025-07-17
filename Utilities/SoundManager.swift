@@ -16,6 +16,14 @@ final class SoundManager {
     let dashPlayer: AVAudioPlayer?
 
     private init() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playback, mode: .default)
+            try session.setActive(true)
+        } catch {
+            print("Audio session setup failed: \(error.localizedDescription)")
+        }
+
         var dot: AVAudioPlayer? = nil
         var dash: AVAudioPlayer? = nil
 
