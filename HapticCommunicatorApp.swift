@@ -11,6 +11,7 @@ import AVFoundation
 
 @main
 struct HapticCommunicatorApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     var body: some Scene {
         WindowGroup {
             HomeView()
@@ -30,6 +31,14 @@ struct HapticCommunicatorApp: App {
                         } else {
                             print("Microphone access NOT granted")
                         }
+                    }
+                }
+                .onAppear {
+                    IntroHapticsPlayer.shared.play()
+                }
+                .onChange(of: scenePhase) { phase in
+                    if phase == .active {
+                        IntroHapticsPlayer.shared.play()
                     }
                 }
         }
