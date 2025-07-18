@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
 
     private let demoText = "This is your current text"
@@ -32,6 +33,12 @@ struct SettingsView: View {
                 Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
             }
+
+            Section {
+                Button("Replay Onboarding") {
+                    onboarding.replay()
+                }
+            }
         }
         .navigationTitle("Settings")
         .onAppear {
@@ -55,5 +62,6 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
             .environmentObject(SettingsViewModel())
+            .environmentObject(OnboardingManager())
     }
 }

@@ -10,9 +10,12 @@ import Speech
 
 @main
 struct HapticCommunicatorApp: App {
+    @StateObject private var onboardingManager = OnboardingManager()
+
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(onboardingManager)
                 .onAppear {
                     SFSpeechRecognizer.requestAuthorization { authStatus in
                         switch authStatus {

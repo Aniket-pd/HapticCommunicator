@@ -7,11 +7,13 @@
 
 
 import SwiftUI
+import TipKit
 
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @StateObject private var caregiverViewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
     @State private var isPressing = false
     @State private var showHelloWorld = false
@@ -299,6 +301,7 @@ struct UserView: View {
                     caregiverViewModel.stopHapticEngine()
                 }
             }
+            .overlay(OnboardingOverlay())
         }
     }
 }
@@ -306,6 +309,8 @@ struct UserView: View {
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
         UserView()
+            .environmentObject(SettingsViewModel())
+            .environmentObject(OnboardingManager())
     }
 }
 
