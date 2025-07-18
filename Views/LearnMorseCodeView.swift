@@ -36,6 +36,7 @@ struct LearnMorseCodeView: View {
         }
         .navigationTitle("Learn Morse Code")
         .onAppear {
+            settings.stopHapticEngine()
             viewModel.startHapticEngine()
         }
         .onDisappear {

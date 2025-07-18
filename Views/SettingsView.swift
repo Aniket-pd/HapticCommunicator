@@ -39,6 +39,9 @@ struct SettingsView: View {
                     LearnMorseCodeView()
                         .environmentObject(settings)
                 }
+                .simultaneousGesture(TapGesture().onEnded {
+                    settings.stopHapticEngine()
+                })
             }
             Section {
                 Button("Show Walkthrough Again") {
