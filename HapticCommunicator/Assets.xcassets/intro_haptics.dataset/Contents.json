@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "acoustic_guitar.transients.ahap",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
