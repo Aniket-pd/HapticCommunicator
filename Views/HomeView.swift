@@ -67,6 +67,7 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @AppStorage("showWalkthrough") private var showWalkthrough: Bool = true
 
     var body: some View {
         VStack(spacing: 0) {
@@ -95,6 +96,9 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .fullScreenCover(isPresented: $showWalkthrough) {
+            OnboardingView(isPresented: $showWalkthrough)
         }
     }
 }
