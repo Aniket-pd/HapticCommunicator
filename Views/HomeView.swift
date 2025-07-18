@@ -67,34 +67,62 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @EnvironmentObject var onboarding: OnboardingManager
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Top tab bar
-            TopTabBar(selectedTab: $selectedTab)
+        ZStack {
+            VStack(spacing: 0) {
+                // Top tab bar
+                TopTabBar(selectedTab: $selectedTab)
 
-            Divider()
+                Divider()
 
-            // Main content area with smooth transitions
-            ZStack {
-                if selectedTab == .userMode {
+                // Main content area with smooth transitions
+                ZStack {
+                    if selectedTab == .userMode {
                     UserView()
                         .environmentObject(settings)
-                        .transition(.opacity)
-                }
-                if selectedTab == .careTaker {
+                        .environmentObject(onboarding)
+                            .transition(.opacity)
+                    }
+                    if selectedTab == .careTaker {
                     CaregiverView()
                         .environmentObject(settings)
-                        .transition(.opacity)
-                }
-                if selectedTab == .settings {
+                        .environmentObject(onboarding)
+                            .transition(.opacity)
+                    }
+                    if selectedTab == .settings {
                     SettingsView()
                         .environmentObject(settings)
-                        .transition(.opacity)
+                        .environmentObject(onboarding)
+                            .transition(.opacity)
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .animation(.easeInOut, value: selectedTab)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .animation(.easeInOut, value: selectedTab)
+
+            if let step = onboarding.currentStep {
+                VStack {
+                    Spacer()
+                    Image(systemName: "hand.point.up.left.fill")
+                        .font(.largeTitle)
+                        .opacity(0.8)
+                        .scaleEffect(1.2)
+                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: onboarding.currentStep)
+                    TipView(step.tip)
+                        .presentationStyle(.spotlight())
+                        .onTapGesture { onboarding.next() }
+                    HStack {
+                        Button("Skip") { onboarding.skip() }
+                        Spacer()
+                        Button("Next") { onboarding.next() }
+                    }
+                    .padding()
+                }
+                .transition(.opacity)
+                .animation(.easeInOut, value: onboarding.currentStep)
+            }
         }
     }
 }

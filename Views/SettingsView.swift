@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
 
     private let demoText = "This is your current text"
@@ -31,6 +32,12 @@ struct SettingsView: View {
             Section(header: Text("Audio")) {
                 Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
+            }
+
+            Section {
+                Button("Reset Onboarding") {
+                    onboarding.reset()
+                }
             }
         }
         .navigationTitle("Settings")
