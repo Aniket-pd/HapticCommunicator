@@ -31,17 +31,5 @@ If you'd like to view it again later, open **Settings** and tap **Show Walkthrou
 2. Select the **HapticCommunicator** scheme.
 3. Build and run with `⌘R` or from the menu (`Product › Run`).
 
-Alternatively from the command line:
 
-```bash
-xcodebuild -scheme HapticCommunicator -destination 'platform=iOS Simulator,name=iPhone 15' build
-```
-
-## Tests
-
-Run the tests in Xcode with `⌘U` or use `xcodebuild`:
-
-```bash
-xcodebuild test -scheme HapticCommunicator -destination 'platform=iOS Simulator,name=iPhone 15'
-```
 
