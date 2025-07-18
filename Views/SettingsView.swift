@@ -9,7 +9,8 @@ struct SettingsView: View {
     private var demoMorse: String { MorseCodeConverter().textToMorse(demoText) }
 
     var body: some View {
-        Form {
+        NavigationStack {
+            Form {
             Section(header: Text("Haptic Speed")) {
                 Picker("Speed", selection: $settings.selectedSpeed) {
                     ForEach(HapticSpeed.allCases) { speed in
@@ -34,12 +35,19 @@ struct SettingsView: View {
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
             }
             Section {
+                NavigationLink("Learn Morse Code") {
+                    LearnMorseCodeView()
+                        .environmentObject(settings)
+                }
+            }
+            Section {
                 Button("Show Walkthrough Again") {
                     showWalkthrough = true
                 }
             }
+            }
+            .navigationTitle("Settings")
         }
-        .navigationTitle("Settings")
         .onAppear {
             settings.startHapticEngine()
         }
