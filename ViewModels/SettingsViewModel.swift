@@ -6,11 +6,22 @@ import Combine
 /// `HapticSpeed` and provides a short haptic preview when the speed
 /// changes.
 class SettingsViewModel: ObservableObject {
+    private static let selectedSpeedKey = "selectedSpeed"
+    private static let beepSoundEnabledKey = "beepSoundEnabled"
+    private static let speechSoundEnabledKey = "speechSoundEnabled"
+
+    private let defaults: UserDefaults
     /// Currently selected haptic speed. `playSpeedPreview()` is called
     /// manually from `SettingsView` whenever this value changes.
-    @Published var selectedSpeed: HapticSpeed = .standard
-    @Published var beepSoundEnabled: Bool = true
-    @Published var speechSoundEnabled: Bool = true
+    @Published var selectedSpeed: HapticSpeed {
+        didSet { defaults.set(selectedSpeed.rawValue, forKey: Self.selectedSpeedKey) }
+    }
+    @Published var beepSoundEnabled: Bool {
+        didSet { defaults.set(beepSoundEnabled, forKey: Self.beepSoundEnabledKey) }
+    }
+    @Published var speechSoundEnabled: Bool {
+        didSet { defaults.set(speechSoundEnabled, forKey: Self.speechSoundEnabledKey) }
+    }
 
     /// Haptic engine used for previewing speed changes.
     private var hapticEngine: CHHapticEngine?
@@ -19,7 +30,17 @@ class SettingsViewModel: ObservableObject {
     /// preview starts.
     private var previewTask: Task<Void, Never>? = nil
 
-    init() {
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        if let savedSpeed = defaults.string(forKey: Self.selectedSpeedKey),
+           let speed = HapticSpeed(rawValue: savedSpeed) {
+            self.selectedSpeed = speed
+        } else {
+            self.selectedSpeed = .standard
+        }
+        self.beepSoundEnabled = defaults.object(forKey: Self.beepSoundEnabledKey) as? Bool ?? true
+        self.speechSoundEnabled = defaults.object(forKey: Self.speechSoundEnabledKey) as? Bool ?? true
+
         prepareHaptics()
     }
 
