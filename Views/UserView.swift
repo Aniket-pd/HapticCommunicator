@@ -28,6 +28,8 @@ struct UserView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                // capture frame for tutorial
+                Color.clear.captureFrame(id: "userTapArea")
                 VStack(spacing: 20) {
                 // HStack {
                 //     Spacer()
@@ -50,6 +52,7 @@ struct UserView: View {
 
                 ScrollViewReader { proxy in
                     ScrollView {
+                        Color.clear.frame(height: 0).captureFrame(id: "messageHistory")
                         VStack(alignment: .leading, spacing: 4) {
                             ForEach(messageHistory) { message in
                                 VStack(alignment: message.isSpeech ? .leading : .trailing, spacing: 2) {

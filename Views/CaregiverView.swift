@@ -24,6 +24,7 @@ struct CaregiverView: View {
                         .padding(.horizontal, 4)
                         .padding(.vertical, 8)
                         .focused($isTextEditorFocused)
+                        .captureFrame(id: "caregiverField")
 
                     if viewModel.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         Text("Type your words here")
@@ -45,6 +46,7 @@ struct CaregiverView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 15)
                 }
+                .captureFrame(id: "caregiverButton")
                 .buttonStyle(.borderedProminent)
                 .tint(viewModel.inputText.isEmpty
                       ? Color.gray

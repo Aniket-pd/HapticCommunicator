@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // Enum to track selected tab
 enum TopTab {
@@ -67,11 +68,14 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @StateObject private var tutorialManager = TutorialManager()
+    @State private var frames: [String: CGRect] = [:]
 
     var body: some View {
         VStack(spacing: 0) {
             // Top tab bar
             TopTabBar(selectedTab: $selectedTab)
+                .captureFrame(id: "topTabBar")
 
             Divider()
 
@@ -95,6 +99,26 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .onPreferenceChange(ViewFramePreferenceKey.self) { value in
+            frames.merge(value) { $1 }
+        }
+        .onAppear {
+            if !settings.hasSeenWalkthrough {
+                settings.showWalkthrough = true
+            }
+        }
+        .onChange(of: settings.showWalkthrough) { show in
+            guard show,
+                  let window = UIApplication.shared.windows.first,
+                  let root = window.rootViewController else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                tutorialManager.start(from: root, frames: frames, selectedTab: $selectedTab)
+                tutorialManager.onFinish = {
+                    settings.showWalkthrough = false
+                    settings.hasSeenWalkthrough = true
+                }
+            }
         }
     }
 }
