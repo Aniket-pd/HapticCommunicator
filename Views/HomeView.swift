@@ -14,7 +14,7 @@ struct TopTabBar: View {
             Button(action: {
                 selectedTab = .userMode
             }) {
-                Text("User Modes")
+                Text("User Mode")
                     .fontWeight(.semibold)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
@@ -30,7 +30,7 @@ struct TopTabBar: View {
             Button(action: {
                 selectedTab = .careTaker
             }) {
-                Text("CareTaker")
+                Text("CareGiver")
                     .fontWeight(.semibold)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)

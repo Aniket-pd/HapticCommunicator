@@ -79,6 +79,28 @@ struct OnboardingSheetView: View {
                         }
                     }
                     .padding()
+
+                    VStack(alignment: .center, spacing: 36) {
+                        VStack(alignment: .center, spacing: 16) {
+                            Image(systemName: "lightbulb.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 70, height: 70)
+                                .foregroundColor(.orange)
+                            Text("Learn Morse Code")
+                                .font(.title)
+                                .fontWeight(.bold)
+                        }
+                        VStack(alignment: .leading, spacing: 9) {
+                            Label("Go to Settings", systemImage: "gearshape.fill")
+                            Label("Tap 'Learn Morse Code'", systemImage: "hand.tap.fill")
+                            Label("Explore each letter and feel its vibration", systemImage: "sparkles")
+                            
+                                .multilineTextAlignment(.center)
+                                .padding(.top, 8)
+                        }
+                    }
+                    .padding()
                 }
                 .tabViewStyle(PageTabViewStyle())
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
