@@ -1,5 +1,6 @@
 import Foundation
 import CoreHaptics
+import Combine
 
 class LearnMorseCodeViewModel: ObservableObject {
     @Published var activeLetter: Character? = nil
