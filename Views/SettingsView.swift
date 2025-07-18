@@ -19,6 +19,7 @@ struct SettingsView: View {
                 .onChange(of: settings.selectedSpeed) { _ in
                     settings.playSpeedPreview()
                 }
+                .captureFrame(id: "settings")
             }
 
             Section(header: Text("Demo")) {
@@ -31,6 +32,12 @@ struct SettingsView: View {
             Section(header: Text("Audio")) {
                 Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
+            }
+
+            Section {
+                Button("Show Walkthrough Again") {
+                    settings.showWalkthrough = true
+                }
             }
         }
         .navigationTitle("Settings")
