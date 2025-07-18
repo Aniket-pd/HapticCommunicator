@@ -7,11 +7,13 @@
 
 
 import SwiftUI
+import TipKit
 
 struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @StateObject private var caregiverViewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
     @State private var isPressing = false
     @State private var showHelloWorld = false
@@ -24,6 +26,43 @@ struct UserView: View {
     ]
     @State private var liveRecognizedText: String = ""
     @State private var liveMorseText: String = ""
+    /// Returns the appropriate TipKit view for the current onboarding step.
+    @ViewBuilder
+    private var onboardingTip: some View {
+        switch onboarding.currentStep {
+        case .tapDot:
+            TipView(DotTip()) {
+                Button("Next") { onboarding.advance() }
+                Button("Skip") { onboarding.skip() }
+            }
+            .presentationStyle(.spotlight)
+        case .tapDash:
+            TipView(DashTip()) {
+                Button("Next") { onboarding.advance() }
+                Button("Skip") { onboarding.skip() }
+            }
+            .presentationStyle(.spotlight)
+        case .addSpace:
+            TipView(SpaceTip()) {
+                Button("Next") { onboarding.advance() }
+                Button("Skip") { onboarding.skip() }
+            }
+            .presentationStyle(.spotlight)
+        case .send:
+            TipView(SendTip()) {
+                Button("Next") { onboarding.advance() }
+                Button("Skip") { onboarding.skip() }
+            }
+            .presentationStyle(.spotlight)
+        case .enableMic:
+            TipView(MicTip()) {
+                Button("Done") { onboarding.advance() }
+            }
+            .presentationStyle(.spotlight)
+        case .none:
+            EmptyView()
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -278,6 +317,7 @@ struct UserView: View {
 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(alignment: .center) { onboardingTip }
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 viewModel.settings = settings

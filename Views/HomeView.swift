@@ -67,6 +67,7 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @EnvironmentObject var onboarding: OnboardingManager
 
     var body: some View {
         VStack(spacing: 0) {
@@ -80,16 +81,19 @@ struct HomeView: View {
                 if selectedTab == .userMode {
                     UserView()
                         .environmentObject(settings)
+                        .environmentObject(onboarding)
                         .transition(.opacity)
                 }
                 if selectedTab == .careTaker {
                     CaregiverView()
                         .environmentObject(settings)
+                        .environmentObject(onboarding)
                         .transition(.opacity)
                 }
                 if selectedTab == .settings {
                     SettingsView()
                         .environmentObject(settings)
+                        .environmentObject(onboarding)
                         .transition(.opacity)
                 }
             }

@@ -8,10 +8,12 @@
 
 import SwiftUI
 import Combine
+import TipKit
 
 struct CaregiverView: View {
     @StateObject private var viewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isTextEditorFocused: Bool
 
@@ -39,12 +41,21 @@ struct CaregiverView: View {
 
                 Button(action: {
                     viewModel.convertTextToMorse()
+                    if onboarding.currentStep == .send {
+                        onboarding.advance()
+                    }
                 }) {
                     Text("Convert to Morse Code")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 15)
                 }
+                .popoverTip(SendTip(), isPresented: Binding(get: {
+                    onboarding.currentStep == .send
+                }, set: { show in
+                    if !show { onboarding.advance() }
+                }))
+                .presentationStyle(.spotlight)
                 .buttonStyle(.borderedProminent)
                 .tint(viewModel.inputText.isEmpty
                       ? Color.gray
