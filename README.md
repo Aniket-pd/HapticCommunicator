@@ -10,6 +10,11 @@ HapticCommunicator is an iOS app for communicating using Morse code through hapt
 
 Switch between these views using the top tab bar in `HomeView`.
 
+### Onboarding
+The first time you launch the app, an interactive walkthrough explains the main screens.
+If you'd like to view it again later, open **Settings** and tap **Show Walkthrough Again**.
+
+
 ## Usage Basics
 
 1. Open the app and allow speech recognition when prompted.
@@ -39,3 +44,4 @@ Run the tests in Xcode with `⌘U` or use `xcodebuild`:
 ```bash
 xcodebuild test -scheme HapticCommunicator -destination 'platform=iOS Simulator,name=iPhone 15'
 ```
+

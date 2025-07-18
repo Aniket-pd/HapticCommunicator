@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var settings: SettingsViewModel
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("showWalkthrough") private var showWalkthrough: Bool = false
 
     private let demoText = "This is your current text"
     private var demoMorse: String { MorseCodeConverter().textToMorse(demoText) }
@@ -31,6 +32,11 @@ struct SettingsView: View {
             Section(header: Text("Audio")) {
                 Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
+            }
+            Section {
+                Button("Show Walkthrough Again") {
+                    showWalkthrough = true
+                }
             }
         }
         .navigationTitle("Settings")
