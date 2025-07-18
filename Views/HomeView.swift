@@ -67,6 +67,7 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @State private var walkthroughStep: WalkthroughStep = .welcome
 
     var body: some View {
         VStack(spacing: 0) {
@@ -95,6 +96,33 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .overlay(
+            Group {
+                if !settings.hasSeenWalkthrough && walkthroughStep != .done {
+                    WalkthroughView(step: $walkthroughStep) {
+                        advanceWalkthrough()
+                    }
+                }
+            }
+        )
+        .onChange(of: walkthroughStep) { step in
+            if step == .done {
+                settings.hasSeenWalkthrough = true
+            }
+        }
+        .onAppear {
+            if !settings.hasSeenWalkthrough {
+                walkthroughStep = .welcome
+            }
+        }
+    }
+
+    private func advanceWalkthrough() {
+        if let next = WalkthroughStep(rawValue: walkthroughStep.rawValue + 1) {
+            walkthroughStep = next
+        } else {
+            walkthroughStep = .done
         }
     }
 }

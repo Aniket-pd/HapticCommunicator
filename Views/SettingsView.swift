@@ -32,6 +32,11 @@ struct SettingsView: View {
                 Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
             }
+            Section {
+                Button("Show Walkthrough Again") {
+                    settings.hasSeenWalkthrough = false
+                }
+            }
         }
         .navigationTitle("Settings")
         .onAppear {

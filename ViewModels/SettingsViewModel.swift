@@ -1,6 +1,7 @@
 import Foundation
 import CoreHaptics
 import Combine
+import SwiftUI
 
 /// View model backing `SettingsView`. Stores the currently selected
 /// `HapticSpeed` and provides a short haptic preview when the speed
@@ -11,6 +12,8 @@ class SettingsViewModel: ObservableObject {
     @Published var selectedSpeed: HapticSpeed = .standard
     @Published var beepSoundEnabled: Bool = true
     @Published var speechSoundEnabled: Bool = true
+    /// Flag tracking if the onboarding walkthrough has been completed.
+    @AppStorage("hasSeenWalkthrough") var hasSeenWalkthrough: Bool = false
 
     /// Haptic engine used for previewing speed changes.
     private var hapticEngine: CHHapticEngine?
