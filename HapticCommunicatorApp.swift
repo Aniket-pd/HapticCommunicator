@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Speech
+import AVFoundation
 
 @main
 struct HapticCommunicatorApp: App {
@@ -20,6 +21,14 @@ struct HapticCommunicatorApp: App {
                             print("Speech recognition authorized")
                         default:
                             print("Speech recognition NOT authorized")
+                        }
+                    }
+
+                    AVAudioSession.sharedInstance().requestRecordPermission { allowed in
+                        if allowed {
+                            print("Microphone access granted")
+                        } else {
+                            print("Microphone access NOT granted")
                         }
                     }
                 }
