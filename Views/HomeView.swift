@@ -67,6 +67,7 @@ struct TopTabBar: View {
 struct HomeView: View {
     @State private var selectedTab: TopTab = .userMode
     @StateObject private var settings = SettingsViewModel()
+    @AppStorage("hasSeenWalkthrough") private var hasSeenWalkthrough = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -95,6 +96,14 @@ struct HomeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .animation(.easeInOut, value: selectedTab)
+        }
+        .sheet(isPresented: $settings.showTutorial, onDismiss: { hasSeenWalkthrough = true }) {
+            WalkthroughView(isPresented: $settings.showTutorial)
+        }
+        .onAppear {
+            if !hasSeenWalkthrough {
+                settings.showTutorial = true
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ class SettingsViewModel: ObservableObject {
     @Published var selectedSpeed: HapticSpeed = .standard
     @Published var beepSoundEnabled: Bool = true
     @Published var speechSoundEnabled: Bool = true
+    @Published var showTutorial: Bool = false
 
     /// Haptic engine used for previewing speed changes.
     private var hapticEngine: CHHapticEngine?

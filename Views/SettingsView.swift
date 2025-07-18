@@ -32,6 +32,12 @@ struct SettingsView: View {
                 Toggle("Beep Sound", isOn: $settings.beepSoundEnabled)
                 Toggle("Speech Sound", isOn: $settings.speechSoundEnabled)
             }
+
+            Section(header: Text("Tutorial")) {
+                Button("Repeat Tutorial") {
+                    settings.showTutorial = true
+                }
+            }
         }
         .navigationTitle("Settings")
         .onAppear {
