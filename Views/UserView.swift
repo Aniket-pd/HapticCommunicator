@@ -12,6 +12,7 @@ struct UserView: View {
     @StateObject private var viewModel = UserViewModel()
     @StateObject private var caregiverViewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
     @State private var isPressing = false
     @State private var showHelloWorld = false
@@ -28,6 +29,27 @@ struct UserView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.clear
+                    .popoverTip(onboarding.tapDotTip) { action in
+                        if action.id == "next" { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight)
+                    .popoverTip(onboarding.tapDashTip) { action in
+                        if action.id == "next" { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight)
+                    .popoverTip(onboarding.addSpaceTip) { action in
+                        if action.id == "next" { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight)
+                    .popoverTip(onboarding.sendDecodeTip) { action in
+                        if action.id == "next" { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight)
+                    .popoverTip(onboarding.enableMicTip) { action in
+                        if action.id == "next" { onboarding.advance() }
+                    }
+                    .presentationStyle(.spotlight)
                 VStack(spacing: 20) {
                 // HStack {
                 //     Spacer()
@@ -274,6 +296,13 @@ struct UserView: View {
                                 }
                             }
                         }
+                }
+
+                if onboarding.step != nil {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                        .onTapGesture { onboarding.advance() }
                 }
 
             }

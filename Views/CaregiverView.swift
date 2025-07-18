@@ -12,15 +12,17 @@ import Combine
 struct CaregiverView: View {
     @StateObject private var viewModel = CaregiverViewModel()
     @EnvironmentObject var settings: SettingsViewModel
+    @EnvironmentObject var onboarding: OnboardingManager
     @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isTextEditorFocused: Bool
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                ZStack(alignment: .topLeading) {
-                    TextEditor(text: $viewModel.inputText)
-                        .font(.system(size: 22, weight: .semibold))
+            ZStack {
+                VStack(spacing: 24) {
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $viewModel.inputText)
+                            .font(.system(size: 22, weight: .semibold))
                         .padding(.horizontal, 4)
                         .padding(.vertical, 8)
                         .focused($isTextEditorFocused)
@@ -45,6 +47,10 @@ struct CaregiverView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 15)
                 }
+                .popoverTip(onboarding.sendDecodeTip) { action in
+                    if action.id == "next" { onboarding.advance() }
+                }
+                .presentationStyle(.spotlight)
                 .buttonStyle(.borderedProminent)
                 .tint(viewModel.inputText.isEmpty
                       ? Color.gray
@@ -53,9 +59,16 @@ struct CaregiverView: View {
                 .controlSize(.regular)
                 .disabled(viewModel.inputText.isEmpty)
 
-                Spacer()
+                    Spacer()
+                }
+                .padding()
+
+                if onboarding.step != nil {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                        .onTapGesture { onboarding.advance() }
+                }
             }
-            .padding()
             .onAppear {
                 viewModel.settings = settings
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

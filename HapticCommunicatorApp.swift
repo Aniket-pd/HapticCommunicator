@@ -7,12 +7,19 @@
 
 import SwiftUI
 import Speech
+import TipKit
 
 @main
 struct HapticCommunicatorApp: App {
+    @StateObject private var onboarding = OnboardingManager()
+
+    init() {
+        try? Tips.configure()
+    }
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(onboarding)
                 .onAppear {
                     SFSpeechRecognizer.requestAuthorization { authStatus in
                         switch authStatus {
