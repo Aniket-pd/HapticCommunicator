@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		354F035F5B880DB649476DF2 /* LearnMorseCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F178B266627CF7D66943ADC /* LearnMorseCodeView.swift */; };
+		404c54c392aa409292024078 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = b6c68765edbe40489e52ab92 /* OnboardingView.swift */; };
+		9E94503360D849218AA397C8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCE636AC5504CC4BBE15096 /* Message.swift */; };
+		B56F9A7DDD040113A76596E9 /* LearnMorseCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5A617B5BC5EEAA0D6EFCEE /* LearnMorseCodeViewModel.swift */; };
 		E21786882E212795005DBB8B /* HapticCommunicatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786872E212795005DBB8B /* HapticCommunicatorApp.swift */; };
 		E21786BC2E2141FA005DBB8B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B72E212AC3005DBB8B /* HomeView.swift */; };
 		E21786D82E216FA4005DBB8B /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B92E212AF5005DBB8B /* UserView.swift */; };
@@ -16,12 +20,8 @@
 		E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */; };
 		E21787422E26F87C005DBB8B /* HapticSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21787412E26F87C005DBB8B /* HapticSpeed.swift */; };
 		E21787442E26F8A2005DBB8B /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */; };
-               E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BA2E212B26005DBB8B /* SettingsView.swift */; };
-               E227DD072E2838270061DA46 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227DD062E2838270061DA46 /* SoundManager.swift */; };
-               9E94503360D849218AA397C8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCE636AC5504CC4BBE15096 /* Message.swift */; };
-               404c54c392aa409292024078 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = b6c68765edbe40489e52ab92 /* OnboardingView.swift */; };
-               354F035F5B880DB649476DF2 /* LearnMorseCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F178B266627CF7D66943ADC /* LearnMorseCodeView.swift */; };
-               B56F9A7DDD040113A76596E9 /* LearnMorseCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5A617B5BC5EEAA0D6EFCEE /* LearnMorseCodeViewModel.swift */; };
+		E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21786BA2E212B26005DBB8B /* SettingsView.swift */; };
+		E227DD072E2838270061DA46 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E227DD062E2838270061DA46 /* SoundManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,12 +42,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F178B266627CF7D66943ADC /* LearnMorseCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMorseCodeView.swift; sourceTree = "<group>"; };
+		7CCE636AC5504CC4BBE15096 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		8A5A617B5BC5EEAA0D6EFCEE /* LearnMorseCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMorseCodeViewModel.swift; sourceTree = "<group>"; };
 		E21786842E212795005DBB8B /* HapticCommunicator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticCommunicator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21786872E212795005DBB8B /* HapticCommunicatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticCommunicatorApp.swift; sourceTree = "<group>"; };
 		E21786912E212796005DBB8B /* HapticCommunicatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HapticCommunicatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E217869B2E212796005DBB8B /* HapticCommunicatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HapticCommunicatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-               7CCE636AC5504CC4BBE15096 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-               E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaregiverViewModel.swift; sourceTree = "<group>"; };
+		E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaregiverViewModel.swift; sourceTree = "<group>"; };
 		E21786B62E212A93005DBB8B /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		E21786B72E212AC3005DBB8B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E21786B82E212AD6005DBB8B /* CaregiverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaregiverView.swift; sourceTree = "<group>"; };
@@ -56,10 +58,8 @@
 		E21786BB2E213AC2005DBB8B /* MorseCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorseCodeConverter.swift; sourceTree = "<group>"; };
 		E21787412E26F87C005DBB8B /* HapticSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticSpeed.swift; sourceTree = "<group>"; };
 		E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-                E227DD062E2838270061DA46 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-               b6c68765edbe40489e52ab92 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-               4F178B266627CF7D66943ADC /* LearnMorseCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMorseCodeView.swift; sourceTree = "<group>"; };
-               8A5A617B5BC5EEAA0D6EFCEE /* LearnMorseCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMorseCodeViewModel.swift; sourceTree = "<group>"; };
+		E227DD062E2838270061DA46 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		b6c68765edbe40489e52ab92 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -132,33 +132,33 @@
 		};
 		E21786AE2E21296D005DBB8B /* Views */ = {
 			isa = PBXGroup;
-                        children = (
-                                E21786BA2E212B26005DBB8B /* SettingsView.swift */,
-                                E21786B92E212AF5005DBB8B /* UserView.swift */,
-                                E21786B82E212AD6005DBB8B /* CaregiverView.swift */,
-                               E21786B72E212AC3005DBB8B /* HomeView.swift */,
-                               b6c68765edbe40489e52ab92 /* OnboardingView.swift */,
-                               4F178B266627CF7D66943ADC /* LearnMorseCodeView.swift */,
-                       );
-                       path = Views;
-                       sourceTree = "<group>";
-               };
-               E21786AF2E212977005DBB8B /* ViewModels */ = {
-                       isa = PBXGroup;
-                       children = (
-                               E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */,
-                               E21786B62E212A93005DBB8B /* UserViewModel.swift */,
-                               E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */,
-                               8A5A617B5BC5EEAA0D6EFCEE /* LearnMorseCodeViewModel.swift */,
-                       );
-                       path = ViewModels;
-                       sourceTree = "<group>";
-               };
+			children = (
+				E21786BA2E212B26005DBB8B /* SettingsView.swift */,
+				E21786B92E212AF5005DBB8B /* UserView.swift */,
+				E21786B82E212AD6005DBB8B /* CaregiverView.swift */,
+				E21786B72E212AC3005DBB8B /* HomeView.swift */,
+				b6c68765edbe40489e52ab92 /* OnboardingView.swift */,
+				4F178B266627CF7D66943ADC /* LearnMorseCodeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E21786AF2E212977005DBB8B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E21787432E26F8A2005DBB8B /* SettingsViewModel.swift */,
+				E21786B62E212A93005DBB8B /* UserViewModel.swift */,
+				E21786B52E212A6E005DBB8B /* CaregiverViewModel.swift */,
+				8A5A617B5BC5EEAA0D6EFCEE /* LearnMorseCodeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		E21786B02E212983005DBB8B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-               E21787412E26F87C005DBB8B /* HapticSpeed.swift */,
-               7CCE636AC5504CC4BBE15096 /* Message.swift */,
+				E21787412E26F87C005DBB8B /* HapticSpeed.swift */,
+				7CCE636AC5504CC4BBE15096 /* Message.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,15 +323,15 @@
 				E227DD072E2838270061DA46 /* SoundManager.swift in Sources */,
 				E21787442E26F8A2005DBB8B /* SettingsViewModel.swift in Sources */,
 				E21786D92E216FBC005DBB8B /* UserViewModel.swift in Sources */,
-                               E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */,
-                               E21786D82E216FA4005DBB8B /* UserView.swift in Sources */,
-                               E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */,
-                               E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */,
-                               9E94503360D849218AA397C8 /* Message.swift in Sources */,
-                               404c54c392aa409292024078 /* OnboardingView.swift in Sources */,
-                               354F035F5B880DB649476DF2 /* LearnMorseCodeView.swift in Sources */,
-                               B56F9A7DDD040113A76596E9 /* LearnMorseCodeViewModel.swift in Sources */,
-                       );
+				E21786DA2E216FCA005DBB8B /* MorseCodeConverter.swift in Sources */,
+				E21786D82E216FA4005DBB8B /* UserView.swift in Sources */,
+				E21786DC2E216FEE005DBB8B /* CaregiverViewModel.swift in Sources */,
+				E21787452E26F93E005DBB8B /* SettingsView.swift in Sources */,
+				9E94503360D849218AA397C8 /* Message.swift in Sources */,
+				404c54c392aa409292024078 /* OnboardingView.swift in Sources */,
+				354F035F5B880DB649476DF2 /* LearnMorseCodeView.swift in Sources */,
+				B56F9A7DDD040113A76596E9 /* LearnMorseCodeViewModel.swift in Sources */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E217868D2E212796005DBB8B /* Sources */ = {
@@ -500,8 +500,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -516,7 +516,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -535,8 +535,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -551,7 +551,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
