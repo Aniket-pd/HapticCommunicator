@@ -289,12 +289,12 @@ struct UserView: View {
                 viewModel.stopHapticEngine()
                 caregiverViewModel.stopHapticEngine()
             }
-            .onChange(of: scenePhase) { phase in
-                if phase == .active {
+            .onChange(of: scenePhase) { oldValue, newValue in
+                if newValue == .active {
                     viewModel.startHapticEngine()
                     caregiverViewModel.startHapticEngine()
                     SoundManager.shared.reactivate()
-                } else if phase == .background {
+                } else if newValue == .background {
                     viewModel.stopHapticEngine()
                     caregiverViewModel.stopHapticEngine()
                 }
